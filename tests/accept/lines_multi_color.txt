@@ -1,0 +1,55 @@
+                                                                                Plot of Continuous Functions                                                    
+                                                                                                                                                                
+        +------------------------------------------------------------------------------------------------------------------------------------------------------+
+   10.0--                                                                                                                           r                          |
+        |                                                                                          o                                r                          |
+        |                                                        o                                 o                               r                           |
+        |                                                        o                                 o                               r                           |
+        |                      o                                 o                aaaa             o                               r                           |
+    7.5--                      o                                 o              aa    aa           o                              r  o                         |
+        |                      o                                 o             aa      aa          o                              r  o                         |
+        |                      o                                 o            aa        aa         oo                            r   o                         |
+        |                      o                                 oo          aa          aa        oo                           rr   o                         |
+        |                      oo                                oo          a            a       o o                           r   oo                         |
+    5.0--                     o o                               o o         a              a      o o                          rr   o o                        |
+        |                     o o                               o o        a                a     o o                          r    o o                        |
+        |                     o o                               o o       aa               rrrrrrrr o                         r     o o                        |
+        |                    oo o                              o  o      aa              rr  aa  o rrr                       rr    o  o                        |
+        |                    o  o                      ++++++++o++o+++  aa              r     aa o  orrr                     r     o  o                        |
+    2.5--                   oo  o                   ++++      o   o  ++aa              r       aa   o  rrr                  r     o   o                        |
+        |                  oo   o                +++         oo   o   aa++++          r        oaa  o    rr                rr   oo    o                        |
+        |                oo     o              +++         oo     o aa     +++       r      ooo   aao      rr             rr  ooo     o                        |
+        |            oooo       o            +++       oooo       aaa        +++    rr   oooo      aaa       rrr        rr oooo       o                        |
+        |       ooaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaao            ++   roooo            oaaaaaaaaarrrrrrrrrraaaaaaaaaaaaaaaaaaaaaaaaaaaaa         |
+f   0.0--       aaa              o        ++ ooooo                 o           oooor                 o           ooooo                 o          oooaaa       |
+(       |                        o       oooo                      o       oooo   +r                 o       oooo                      o       oooo            |
+x       |                        o     ooo                         o     ooo      r ++               o     oo                          o     oo                |
+)       |                        o    oo                           o    o         r  ++              o   oo                            o   oo                  |
+   −2.5--                        o   o                             o   o         r    ++             o   o                             o  oo                   |
+        |                        o +o                              o  o          r     ++            o  o                              o  o                    |
+        |                        o++o                              o  o         r        +           o  o                              o oo                    |
+        |                        o+o                               o o          r         +          o o                               o o                     |
+        |                       +o o                               o o         r           +         o o                               o o                     |
+   −5.0--                      ++ oo                               o o         r            +        o o                               oo                      |
+        |                     ++  o                                oo          r             ++      oo                                 o                      |
+        |                    ++   o                                oo         r               ++      o                                 o                      |
+        |                    +    o                                 o         r                +      o                                 o                      |
+        |                   +     o                                 o         r                 +     o                                 o                      |
+   −7.5--                  +      o                                 o        r                   +    o                                 o                      |
+        |                 ++                                        o        r                   ++   o                                 o                      |
+        |                ++                                         o        r                    ++  o                                                        |
+        |               ++                                          o       r                      ++ o                                                        |
+        |               +                                           o       r                       +                                                          |
+  −10.0--              +                                                    r                        +                                                         |
+        +----------|--------------------|---------------------|--------------------|---------------------|---------------------|--------------------|----------+
+                  −6                   −4                    −2                    0                     2                     4                    6           
+                                                                                    x                                                                           
+                                                                                                                                                                
+                                                                                +---------------------+                                                         
+                                                                                | Legend              |                                                         
+                                                                                |                     |                                                         
+                                                                                | +++ -x**2 - 4x - 1  |                                                         
+                                                                                | ooo tan(x)          |                                                         
+                                                                                | aaa 8exp(-x^2)      |                                                         
+                                                                                | rrr x^3 - 6x^2 + 9x |                                                         
+                                                                                +---------------------+                                                         

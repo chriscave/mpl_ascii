@@ -1,0 +1,92 @@
+                                                                                                                                                                
+                                                                                                                                                                
+        +------------------------------------------------------------------------------------------------------------------------------------------------------+
+        |                                                                                                                                                      |
+        |                                                                                                                                                      |
+        |                                                                                                                                                      |
+        |                                                                                                                                                      |
+        |                                                                                                                                                      |
+        |            +                                                                                                                                         |
+   0.05--            ++                                        +   + +                                                                                         |
+        |            ++                                        ++ ++++                                                           o                             |
+        |            ++                        +    +          ++ +++++                                                         oo                 oo          |
+        | o          ++                       ++    +          ++ + +++                                                         oo                ooo          |
+        | o          ++             o         ++    ++         ++ + +++                        o                                oo           o oo ooo          |
+        | o     o    ++          o  oo    oo  ++    ++       + ++ +  ++ +     o                o                                oo           o oooooo          |
+        |oo  +  o o  ++     +    oo oo    oo  ++   + + +     + ++ +  ++ +     o               oo           o+                 + oo    +      oooooooo          |
+        |oo ++ oo oo+ +     + o  oo oo    oo +++   + + +     + ++ +  ++ +     o  +            ooo          o++               ++ o o + +o     oooooo+o    o     |
+        |oo ++ oo oo+ +     ++ooooo oo    ooooo+ + + +++     ++++++   + ++    oo +            ooo  o       oo+             +++ooo o++ +o+   oooo oo o   +o     |
+        |ooo++ooo oo+ o+    ++ooo+oooo    o ooo+o+ + +++     ++ ++    + ++    oo++ o +    o  o oo oo       ooo +        +  +++ooo o+o oo++ +o oo+oo o o +o     |
+        |ooo+oooooooo o+   +o+ooo+oooo  o o oooooo +o+++     ++  +    + ++ o  oo+o+oo+    o  o  o oooo     ooo +        +  +++ooo oooooo++ +o o++oo o o +oo    |
+        |ooooooo+oo+ooo++  +o+ooo++ooo +o o oo ooo +o+o+  +  ++  +   o o++ o  oo+o+oo+    o oo  o oooo +   o o+++       +  +++ooo ooooo oo +o o++oo oooo+ooo   |
+        |ooooooo+o++ooo o+ oo+ooo++ooo +o o+oo ooo+ ooo+ o+ +o+ o  ooo oo++oo+oo+oooo+    ooo+  ooo oo +   o o+o+ o  o  ++ +++o+  ooooo oo++o ++ o+ oo+oo+ooo  |
+   0.00--ooo+ooo+o++ oo o+ oo+ooo ++oo +o+o+oo ooo+ ooo +o+ oo+ o  ooo ooo+oo+oo+ooooo  ooooo+  ooo o o+o +o o+o+ o  oo ++ ++ o+  ooooo ooo+o ++ ++ +o+oo+ooo  |
+s       |ooo+o o++++ oo oo oo ooo ++oo+oooo o  ooo+ oooo+oo oo  o  oo oooooooo+ooooooo oooooo+  oo+ o o+o++o ooo+ o  oo +++++ o+ + ooo+ o+o o ++ ++ +o+oo+ooo +|
+1       |o o+o o++++  o oo+oooooo    o+ooo  o  o o+ oooo+oo ooooo  oo ooooo+oo+ooooo o+oooooo+++oo++o +oo++o ooo+oo  oo++++o  o+ + ooo+ o o o ++ ++ +o oo+ooo +|
+        |   +   +  +  o oooooo +o    o+o o  +     o oooo+oo+ooooo ooo oo oo+oo+oo oo o+ooo oo+++ o++ ++ooooo ooo+oo  oo+ ++ooo + +++o +   o o  + ++ ++ oo+ +o +|
+a       |   +         o oooo o ++    o+o o  +     o oo o+oo+o ooo oo  o  oo oo oo o+ o+ooo o +++ +++++ ooooo ooo+ooo oo ooo oo ++++       o o    +   + oo+ +o++|
+n       |             o oooo o  +    o+o o  +     oooo o oo+o ooo o   o  oo oo oo ++ o+ooo o + + ++ +  o oo    o+o+oooo ooo oo  +++       o o        + oo ++ o+|
+d       |              oo oo o        oo o        ooo  oo oo  o o o   o   o o+ +   + ooooo o   +  +    o oo     oo ooo oooo oo  +++        o         + o  ++ o+|
+        |              o  oo          oo o        ooo  oo oo  o o o       o o+     + oooo+     +  +             oo oo  oooo oo  +          o           o  ++ o |
+s       |              o  o           oo o        ooo   o oo     o                 + oooo                       oo oo  oo o  o  +                         ++ oo|
+2       |              o              o  o        oo       o     o                   oooo                       o  oo  oo o  o                            ++ oo|
+        |              o              o           o        o     o                    o                         o  oo  oo o                                  o |
+        |                                         o              o                    o                         o  +o  o  o                                  o |
+  −0.05--                                                                                                       o  +o  o                                     o |
+        |                                                                                                       o   +  o                                       |
+        |                                                                                                       o      o                                       |
+        |                                                                                                                                                      |
+        |                                                                                                                                                      |
+        |                                                                                                                                                      |
+        |                                                                                                                                                      |
+        |                                                                                                                                                      |
+        |                                                                                                                                                      |
+        +|-----------------------------|-----------------------------|----------------------------|-----------------------------|-----------------------------|+
+         0                             1                             2                            3                             4                             5 
+                                                                                    Time (s)                                                                    
+                                                                                                                                                                
+                                                                                                                                                                
+      +------------------------------------------------------------------------------------------------------------------------------------------------------+  
+      |                                                                                                                                                      |  
+      |                                                                                                                                                      |  
+  −41--                                  +                                                                                                                   |  
+      |                                 ++                                                                                                                   |  
+      |                                 ++                                                                                                                   |  
+      |                                 ++                                                                                                                   |  
+      |                                 ++                                                                                                                   |  
+      |          +                      + +                                                                                                                  |  
+      |         ++                     +  +                                                                                                                  |  
+      |         + +                    +  +                                                                                                                  |  
+      |        +  ++   ++              +  +                                                                                                                  |  
+  −51--        +  + +  + +             +  +                                                                                                                  |  
+      |        +     ++  +             +  +                                                                                                                  |  
+      |        +     ++  +             +  +                                                                                                                  |  
+      |        +      +  +  +          +  +                                                                                                                  |  
+      |       +          +  +  +      +   +                                                                                                                  |  
+      |       +           +++ + +     +   +                                                                                                                  |  
+      |       +           ++ ++ ++    +    +                                                                                                                 |  
+      |       +           ++ ++  +   +     +                                                                                                                 |  
+      |       +           +  +    ++ +     ++        +                                                                                                       |  
+C −61--                   +  +    ++ +     + +  +   + +                                                                                                      |  
+S     |                           ++ +     +  + + +++ +     +                       +                                                                        |  
+D     |                            + +         ++ +    + ++++                   +   +                                                                        |  
+      |                            + +         ++ +    + +   +  ++             + + ++                                                                        |  
+(     |                            + +          + +    ++    + +  +    +       + ++++         +             +    +                              +            |  
+d     |                             +           + +     +    + +  +    +       +     + ++   + +      +  +  ++    ++                   +     +   ++           |  
+B     |                             +            +      +     +   +  + + ++ + +      + ++   + +  + +++ + ++ +    ++                   ++   + + + +           |  
+)     |                             +            +                 ++++ ++ + ++      + + +++ + ++ +   ++  +  +   ++         ++    +  + +   + + + +           |  
+      |                             +            +                 +  + +  +  +      ++  + + + ++     +      +  +  +      + + +   ++++  +  + + +  +          |  
+      |                             +            +                 +  + +             +  +   + +      +      +  +  +   + + +  ++ +       + +  +   ++         |  
+  −71--                             +            +                                    +                      ++ +   ++++ + +    ++       ++   +     +        |  
+      |                             +            +                                                             ++   +   ++      ++        +   +     +        |  
+      |                                                                                                                 +                 +         +        |  
+      |                                                                                                                 +                 +         +        |  
+      |                                                                                                                                              +       |  
+      |                                                                                                                                              +       |  
+      |                                                                                                                                              +       |  
+      |                                                                                                                                                      |  
+      |                                                                                                                                                      |  
+  −81--                                                                                                                                                      |  
+      +-------|--------------------------|--------------------------|--------------------------|--------------------------|--------------------------|-------+  
+              0                         10                         20                         30                         40                         50          
+                                                                                  Frequency                                                                     
