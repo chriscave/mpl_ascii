@@ -1,6 +1,7 @@
 DATA_DIR=data
 LOCATION:=$(DATA_DIR)/plots
 TEST_LOCATION:=$(DATA_DIR)/tests
+TEST_DIR:=tests
 
 ACCEPTANCE_DIR=$(TEST_DIR)/accept
 
