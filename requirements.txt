@@ -1,0 +1,8 @@
+# Library requirements
+matplotlib >= 3.8.3
+
+# Test requirements
+pytest >= 8.1.1
+
+# Build requirements
+setuptools >= 61.0

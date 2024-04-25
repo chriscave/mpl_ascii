@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mpl_ascii"
+dependencies = [
+"matplotlib>=3.8.3"
+]
+version = "0.0.1"
+description = "A matplotlib backend that produces plots using only ASCII characters"
+license = {text = "MIT License"}
+keywords = ["matplotlib", "plotting", "ASCII"]
+
+[tool.setuptools]
+packages = ["mpl_ascii"]
