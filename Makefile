@@ -58,8 +58,7 @@ test-%.success: $(ACCEPTANCE_DIR)/%.txt
 	fi;
 	@echo "\033[1m[\033[1;32mSUCCESS:\033[1;93m $<\033[0m\033[1m]\033[0m"
 
-SUCCESS_FILES:=$(patsubst %,test-%.success,$(ALL_PLOTS_NAMES))
-test: $(SUCCESS_FILES)
+test: $(patsubst %,test-%.success,$(ALL_PLOTS_NAMES))
 	@true
 
 
