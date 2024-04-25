@@ -7,7 +7,7 @@ name = "mpl_ascii"
 dependencies = [
 "matplotlib>=3.8.3"
 ]
-version = "0.0.1"
+version = "0.1.0"
 description = "A matplotlib backend that produces plots using only ASCII characters"
 license = {text = "MIT License"}
 readme = "README.md"
