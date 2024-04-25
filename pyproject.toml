@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools >= 61.0"]
+requires = ["setuptools>=62"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -10,6 +10,7 @@ dependencies = [
 version = "0.0.1"
 description = "A matplotlib backend that produces plots using only ASCII characters"
 license = {text = "MIT License"}
+readme = "README.md"
 keywords = ["matplotlib", "plotting", "ASCII"]
 
 [tool.setuptools]
