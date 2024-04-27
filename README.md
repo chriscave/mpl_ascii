@@ -24,7 +24,9 @@ If you want to save a figure to a `.txt` file then just use `figure.savefig("my_
 
 See more information about using backends here: https://matplotlib.org/stable/users/explain/figure/backends.html
 
-## Example
+## Examples
+
+### Bar chart
 
 The following is taken from the example in `examples/bar_color.py`
 
@@ -45,6 +47,218 @@ ax.set_title('Fruit supply by kind and color')
 ax.legend(title='Fruit color')
 
 plt.show()
+```
+```
+                                                      Fruit supply by kind and color
+
+      +----------------------------------------------------------------------------------------------------+
+      |                                                                                                    |
+      |                                                                                                    |
+  100--                                                                                                    |
+      |                            %%%%%%%%%%%%%%%%%%%                                                     |
+      |                            %%%%%%%%%%%%%%%%%%%                                                     |
+      |                            %%%%%%%%%%%%%%%%%%%                                                     |
+      |                            %%%%%%%%%%%%%%%%%%%                                                     |
+      |                            %%%%%%%%%%%%%%%%%%%                                                     |
+      |                            %%%%%%%%%%%%%%%%%%%                                                     |
+   80--                            %%%%%%%%%%%%%%%%%%%                                                     |
+      |                            %%%%%%%%%%%%%%%%%%%                                                     |
+      |                            %%%%%%%%%%%%%%%%%%%                                                     |
+      |                            %%%%%%%%%%%%%%%%%%%                                                     |
+      |                            %%%%%%%%%%%%%%%%%%%                                                     |
+      |                            %%%%%%%%%%%%%%%%%%%                                                     |
+      |                            %%%%%%%%%%%%%%%%%%%                                                     |
+      |                            %%%%%%%%%%%%%%%%%%%                                                     |
+   60--                            %%%%%%%%%%%%%%%%%%%                                                     |
+      |                            %%%%%%%%%%%%%%%%%%%                                                     |
+      |                            %%%%%%%%%%%%%%%%%%%                                                     |
+f     |                            %%%%%%%%%%%%%%%%%%%                             &&&&&&&&&&&&&&&&&&&     |
+r     |                            %%%%%%%%%%%%%%%%%%%                             &&&&&&&&&&&&&&&&&&&     |
+u     |                            %%%%%%%%%%%%%%%%%%%                             &&&&&&&&&&&&&&&&&&&     |
+i     |                            %%%%%%%%%%%%%%%%%%%                             &&&&&&&&&&&&&&&&&&&     |
+t  40--                            %%%%%%%%%%%%%%%%%%%                             &&&&&&&&&&&&&&&&&&&     |
+      |     ###################    %%%%%%%%%%%%%%%%%%%                             &&&&&&&&&&&&&&&&&&&     |
+s     |     ###################    %%%%%%%%%%%%%%%%%%%                             &&&&&&&&&&&&&&&&&&&     |
+u     |     ###################    %%%%%%%%%%%%%%%%%%%                             &&&&&&&&&&&&&&&&&&&     |
+p     |     ###################    %%%%%%%%%%%%%%%%%%%                             &&&&&&&&&&&&&&&&&&&     |
+p     |     ###################    %%%%%%%%%%%%%%%%%%%     ###################     &&&&&&&&&&&&&&&&&&&     |
+l     |     ###################    %%%%%%%%%%%%%%%%%%%     ###################     &&&&&&&&&&&&&&&&&&&     |
+y     |     ###################    %%%%%%%%%%%%%%%%%%%     ###################     &&&&&&&&&&&&&&&&&&&     |
+   20--     ###################    %%%%%%%%%%%%%%%%%%%     ###################     &&&&&&&&&&&&&&&&&&&     |
+      |     ###################    %%%%%%%%%%%%%%%%%%%     ###################     &&&&&&&&&&&&&&&&&&&     |
+      |     ###################    %%%%%%%%%%%%%%%%%%%     ###################     &&&&&&&&&&&&&&&&&&&     |
+      |     ###################    %%%%%%%%%%%%%%%%%%%     ###################     &&&&&&&&&&&&&&&&&&&     |
+      |     ###################    %%%%%%%%%%%%%%%%%%%     ###################     &&&&&&&&&&&&&&&&&&&     |
+      |     ###################    %%%%%%%%%%%%%%%%%%%     ###################     &&&&&&&&&&&&&&&&&&&     |
+      |     ###################    %%%%%%%%%%%%%%%%%%%     ###################     &&&&&&&&&&&&&&&&&&&     |
+    0--     ###################    %%%%%%%%%%%%%%%%%%%     ###################     &&&&&&&&&&&&&&&&&&&     |
+      +--------------|-----------------------|----------------------|-----------------------|--------------+
+                 apple               blueberry                 cherry                  orange
+
+
+                                                      +-------------+
+                                                      | Fruit color |
+                                                      |             |
+                                                      | ### red     |
+                                                      | %%% blue    |
+                                                      | &&& orange  |
+                                                      +-------------+
+```
+
+### Scatter plot
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+
+np.random.seed(0)
+x = np.random.rand(40)
+y = np.random.rand(40)
+colors = np.random.choice(['red', 'green', 'blue', 'yellow'], size=40)
+color_labels = ['Red', 'Green', 'Blue', 'Yellow']  # Labels corresponding to colors
+
+# Create a scatter plot
+fig, ax = plt.subplots()
+for color, label in zip(['red', 'green', 'blue', 'yellow'], color_labels):
+    # Plot each color as a separate scatter plot to enable legend tracking
+    idx = np.where(colors == color)
+    ax.scatter(x[idx], y[idx], color=color, label=label)
+
+# Set title and labels
+ax.set_title('Scatter Plot with 4 Different Colors')
+ax.set_xlabel('X axis')
+ax.set_ylabel('Y axis')
+
+# Add a legend
+ax.legend(title='Point Colors')
+plt.show()
+```
+```
+                                                                                                                                     Scatter Plot with 4 Different Colors
+
+       +----------------------------------------------------------------------------------------------------+
+       |                                                                                                    |
+   1.0--                                                                                                    |
+       |                            z                 v         z                                           |
+       |                                                                                                    |
+       |                                                                                                    |
+       |                                                                                                    |
+       |                                                                                                    |
+       |                                                    x                                               |
+       |                x                                                                                   |
+   0.8--                                                                                                    |
+       |                                                                                                    |
+       |    x                                                                                               |
+       |                                                                                                    |
+       |                                                           z                                        |
+       |     *                                    z   z                z                                    |
+       |                                                                                                    |
+   0.6--                                                        z                                           |
+       |                                                                             *                      |
+       |                                                                                                    |
+       |                                                                                                    |
+Y      |                                                                                                    |
+       |                                                                           vv                       |
+a      |                                                    v                 v                             |
+x      |                                                                                                    |
+i  0.4--                                                                                                    |
+s      |                                       x              v        x                                    |
+       |                                                                                                    |
+       |                                                                                             z      |
+       |                                                            x                              v        |
+       |                                                                                 x                  |
+       |                                                                                    v               |
+   0.2--         *    z                             v                                                       |
+       |                                                                                                    |
+       |           v                                                                                  z     |
+       |                                                             *     x        v         v             |
+       |                                          v                                   x           vv        |
+       |                                                      v                                             |
+       |                                                             x                                      |
+       |                                                                                                    |
+   0.0--                                                                                                    |
+       +---|-----------------|------------------|------------------|------------------|------------------|--+
+         0.0               0.2                0.4                0.6                0.8                1.0
+                                                          X axis
+
+                                                      +--------------+
+                                                      | Point Colors |
+                                                      |              |
+                                                      | xxx Red      |
+                                                      | *** Green    |
+                                                      | vvv Blue     |
+                                                      | zzz Yellow   |
+                                                      +--------------+
+```
+
+### Line plot
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Data for plotting
+t = np.arange(0.0, 2.0, 0.01)
+s = 1 + np.sin(2 * np.pi * t)
+c = 1 + np.cos(2 * np.pi * t)
+
+fig, ax = plt.subplots()
+ax.plot(t, s)
+ax.plot(t, c)
+
+ax.set(xlabel='time (s)', ylabel='voltage (mV)',
+    title='About as simple as it gets, folks')
+
+plt.show()
+```
+
+```
+                                                       About as simple as it gets, folks
+
+        +----------------------------------------------------------------------------------------------------+
+        |                                                                                                    |
+        |                                                                                                    |
+   2.00--    ooo       +++++                             ooooo      +++++                             oo     |
+        |       oo    ++   ++                           o    oo    ++   ++                           oo      |
+        |        o   +      +                          o      o   +       +                         o        |
+        |         o ++       +                        oo       o  +       ++                       oo        |
+   1.75--         o +         +                       o         o+         +                       o         |
+        |          o          ++                     o          oo         ++                     oo         |
+        |         + o          +                    o           +o          +                     o          |
+        |         + o           +                   o          +  o          +                   o           |
+        |         +  o          +                  o           +  o          +                   o           |
+   1.50--        +   o          +                  o          +   o           +                 o            |
+        |        +    o          +                 o          +    o          +                 o            |
+        |       +     o          +                o          +     o           +               o             |
+        |       +      o          +               o          +      o          +               o             |
+   1.25--      +       o          +              o           +      o           +             o              |
+        |      +       o           +             o          +        o          +             o              |
+        |     +         o          +            o           +        o          +             o              |
+        |     +         o           +           o          +          o          +           o               |
+        |    +           o          +          o           +          o          +           o               |
+v  1.00--    +           o           +         o           +          o           +          o               |
+o       |                o           +         o          +           o           +         o          +     |
+l       |                 o          +         o          +            o          +         o          +     |
+t       |                 o          +        o          +             o           +       o           +     |
+a  0.75--                  o          +       o          +              o          +       o          +      |
+g       |                  o          +      o          +               o           +     o           +      |
+e       |                   o          +     o          +                o          +     o          +       |
+        |                   o          +    o           +                o           +   o           +       |
+(  0.50--                   o           +   o          +                  o          +   o          +        |
+m       |                    o          +  o           +                  o          +   o          +        |
+V       |                    o           + o          +                    o          + o          +         |
+)       |                     o          +o           +                    o          + o          +         |
+        |                     oo          o          +                     oo          o          ++         |
+   0.25--                      o         o+         +                       o         o +         +          |
+        |                       o       oo +       ++                        o       oo ++       +           |
+        |                       o       o   +      +                          o      o   +      +            |
+        |                        oo   oo    ++    ++                          oo    oo   ++    ++            |
+   0.00--                         ooooo       ++++                              oooo       ++++              |
+        |                                                                                                    |
+        |                                                                                                    |
+        +----|-----------|----------|----------|-----------|----------|----------|-----------|----------|----+
+          0.00        0.25       0.50       0.75        1.00       1.25       1.50        1.75       2.00
+                                                           time (s)
 ```
 
 You can find more examples in the `examples` folder and their txt files under `tests/accept`.
