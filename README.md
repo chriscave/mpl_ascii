@@ -107,6 +107,8 @@ y     |     ###################    %%%%%%%%%%%%%%%%%%%     ###################  
 
 ### Scatter plot
 
+The following is taken from the example in `examples/scatter_multi_color.py`
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -193,6 +195,9 @@ s      |                                       x              v        x        
 
 ### Line plot
 
+The following is taken from the example in `examples/double_plot.py`
+
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -261,7 +266,7 @@ V       |                    o           + o          +                    o    
                                                            time (s)
 ```
 
-You can find more examples in the `examples` folder and their txt files under `tests/accept`.
+You can find more examples and their outputs in the `examples` folder.
 
 ## Use cases
 
