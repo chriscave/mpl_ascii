@@ -47,7 +47,7 @@ ax.legend(title='Fruit color')
 plt.show()
 ```
 
-You can find more examples in the `examples` folder
+You can find more examples in the `examples` folder and their txt files under `tests/accept`.
 
 ## Use cases
 
