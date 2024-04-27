@@ -32,6 +32,9 @@ The following is taken from the example in `examples/bar_color.py`
 
 ```python
 import matplotlib.pyplot as plt
+import matplotlib as mpl
+
+mpl.use("module://mpl_ascii")
 
 fig, ax = plt.subplots()
 
@@ -112,6 +115,9 @@ The following is taken from the example in `examples/scatter_multi_color.py`
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib as mpl
+
+mpl.use("module://mpl_ascii")
 
 np.random.seed(0)
 x = np.random.rand(40)
@@ -201,6 +207,10 @@ The following is taken from the example in `examples/double_plot.py`
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib as mpl
+
+mpl.use("module://mpl_ascii")
+
 
 # Data for plotting
 t = np.arange(0.0, 2.0, 0.01)
