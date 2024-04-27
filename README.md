@@ -78,4 +78,4 @@ Please help make this package better by:
 
 If you want to tell me about any of the above just use the Issues tab for now.
 
-Thanks for reading and I hope you willS like these plots as much as I do :-)
+Thanks for reading and I hope you will like these plots as much as I do :-)
