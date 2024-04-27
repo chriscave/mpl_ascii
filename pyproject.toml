@@ -3,6 +3,7 @@ requires = ["setuptools>=62"]
 build-backend = "setuptools.build_meta"
 
 [project]
+requires-python = ">= 3.10"
 name = "mpl_ascii"
 dependencies = [
 "matplotlib>=3.8.3"
