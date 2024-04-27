@@ -1,9 +1,8 @@
 DATA_DIR=data
 LOCATION:=$(DATA_DIR)/plots
 TEST_LOCATION:=$(DATA_DIR)/tests
-TEST_DIR:=tests
 
-ACCEPTANCE_DIR=$(TEST_DIR)/accept
+ACCEPTANCE_DIR=examples
 
 MPL_ASCII_FILES=$(wildcard mpl_ascii/*.py)
 EXAMPLES_PY_FILES=$(wildcard examples/*.py)
@@ -45,10 +44,10 @@ all.png: $(addprefix $(LOCATION)/,$(ALL_PLOTS_PNG))
 	@true
 
 
-%.txt: examples/plots/%.txt
+%.txt: $(LOCATION)/%.txt
 	@true
 
-%.png: examples/plots/%.png
+%.png: $(LOCATION)/%.png
 	@true
 
 test-%.success: $(ACCEPTANCE_DIR)/%.txt
