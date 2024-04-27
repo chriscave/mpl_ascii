@@ -68,3 +68,14 @@ To mitigate these issues, ASCII plots serve as an effective alternative:
 
 
 This package acts as a backend for Matplotlib, enabling you to continue creating plots in your usual formats (PNG, SVG) during development. When you’re ready to commit your plots to a repository, simply switch to the `mpl_ascii` backend to convert them into ASCII format.
+
+## Feedback
+
+Please help make this package better by:
+- reporting bugs.
+- making feature requests. Matplotlib is an enormous library and this supports only a part of it. Let me know if there particular charts that you would like to be converted to ASCII
+- letting me know what you use this for.
+
+If you want to tell me about any of the above just use the Issues tab for now.
+
+Thanks for reading and I hope you willS like these plots as much as I do :-)
