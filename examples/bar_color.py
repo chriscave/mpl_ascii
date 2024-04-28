@@ -1,8 +1,10 @@
 import argparse
 import matplotlib as mpl
-
+import mpl_ascii
 
 mpl.use("module://mpl_ascii")
+mpl_ascii.AXES_WIDTH=100
+mpl_ascii.AXES_HEIGHT=40
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(allow_abbrev=False)

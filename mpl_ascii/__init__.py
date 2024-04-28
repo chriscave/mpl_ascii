@@ -17,7 +17,8 @@ from mpl_ascii.color_map import map_color_to_ascii
 from mpl_ascii.draw import draw_bar, draw_frame, draw_line, draw_x_ticks, draw_y_ticks
 from mpl_ascii.tools import linear_transform
 
-
+AXES_WIDTH = 150
+AXES_HEIGHT = 40
 
 class RendererAscii(RendererAgg):
 
@@ -68,8 +69,8 @@ class FigureCanvasAscii(FigureCanvasAgg):
 
         figure = self.figure
 
-        axes_width = 150
-        axes_height = 40
+        axes_height = AXES_HEIGHT
+        axes_width = AXES_WIDTH
 
         frame_buffer_left = 1
         frame_buffer_right = 1

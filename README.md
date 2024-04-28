@@ -33,6 +33,10 @@ The following is taken from the example in `examples/bar_color.py`
 ```python
 import matplotlib.pyplot as plt
 import matplotlib as mpl
+import mpl_ascii
+
+mpl_ascii.AXES_WIDTH=100
+mpl_ascii.AXES_HEIGHT=40
 
 mpl.use("module://mpl_ascii")
 
@@ -116,6 +120,11 @@ The following is taken from the example in `examples/scatter_multi_color.py`
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib as mpl
+import mpl_ascii
+
+mpl_ascii.AXES_WIDTH=100
+mpl_ascii.AXES_HEIGHT=40
+
 
 mpl.use("module://mpl_ascii")
 
@@ -142,7 +151,7 @@ ax.legend(title='Point Colors')
 plt.show()
 ```
 ```
-                                                                                                                                     Scatter Plot with 4 Different Colors
+                                                      Scatter Plot with 4 Different Colors
 
        +----------------------------------------------------------------------------------------------------+
        |                                                                                                    |
@@ -208,6 +217,11 @@ The following is taken from the example in `examples/double_plot.py`
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib as mpl
+import mpl_ascii
+
+mpl_ascii.AXES_WIDTH=100
+mpl_ascii.AXES_HEIGHT=40
+
 
 mpl.use("module://mpl_ascii")
 
