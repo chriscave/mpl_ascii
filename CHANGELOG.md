@@ -7,8 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Changed
-- Updated `README.md`
+### Added
+
+- The width and height of each axes can be set using `mpl_ascii.AXES_WIDTH` and `mpl_ascii.AXES_HEIGHT`. It defaults to 150 characters in width and 40 characters in height.
 
 ## [0.1.0] - 2024-04-25
 
