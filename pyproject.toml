@@ -15,5 +15,8 @@ license = {text = "MIT License"}
 readme = "README.md"
 keywords = ["matplotlib", "plotting", "ASCII"]
 
+[project.urls]
+Homepage = "https://github.com/chriscave/mpl_ascii"
+
 [tool.setuptools]
 packages = ["mpl_ascii"]
