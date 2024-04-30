@@ -9,7 +9,7 @@ dependencies = [
 "matplotlib>=3.8.3",
 "rich>=13.7.1"
 ]
-version = "0.2.0"
+version = "0.3.0"
 description = "A matplotlib backend that produces plots using only ASCII characters"
 license = {text = "MIT License"}
 readme = "README.md"
