@@ -30,9 +30,8 @@ line_char = [
     "!"
 ]
 
-scatter_char = [
+scatter_chars = [
     "x",
-    "*",
     "v",
     "z",
     "s",
