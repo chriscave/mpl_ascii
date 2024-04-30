@@ -1,6 +1,12 @@
 import math
+from matplotlib.collections import PathCollection
+from matplotlib.container import BarContainer
+from matplotlib.lines import Line2D
+from matplotlib.patches import Rectangle
 import numpy as np
 
+from mpl_ascii.ascii_canvas import AsciiCanvas
+from mpl_ascii.color_map import ax_color_map, std_color
 from mpl_ascii.tools import linear_transform, scale_factor
 
 def draw_ax(ax, axes_height, axes_width):
@@ -191,7 +197,7 @@ def draw_line(height, width, x_data, y_data, x_range, y_range, char):
         round(linear_transform(y, y_min, y_max, 1, height)) for y in plot_y if (y <= y_max and y >= y_min)
     ]
 
-    line_canvas_arr = np.full((height, width), fill_value=" ")
+    line_canvas_arr = np.full((height, width), fill_value=" ", dtype="object")
 
     start_points = zip(ascii_x_data[:-1], ascii_y_data[:-1])
     end_points = zip(ascii_x_data[1:], ascii_y_data[1:])

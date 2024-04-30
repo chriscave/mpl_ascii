@@ -10,7 +10,7 @@ def overlay(background, foreground, start_row, start_col):
     total_cols = max_col - min_col
 
     # Create the resulting array filled with spaces (or appropriate background fill)
-    result = np.full((total_rows, total_cols), ' ', dtype='<U32')
+    result = np.full((total_rows, total_cols), ' ', dtype="object")
     bg_start_row = max(-min_row, 0)  # This will be 0 if start_row is >= 0
     bg_start_col = max(-min_col, 0)  # This will be 0 if start_col is >= 0
     result[bg_start_row:bg_start_row+background.shape[0],
