@@ -5,20 +5,17 @@ from matplotlib.backends.backend_agg import (
     RendererAgg,
     FigureCanvasAgg,
 )
-from matplotlib.collections import PathCollection
-from matplotlib.container import BarContainer
 from matplotlib.figure import Figure
-from matplotlib.lines import Line2D
-from matplotlib.patches import Rectangle
-import numpy as np
 
 from mpl_ascii.ascii_canvas import AsciiCanvas
-from mpl_ascii.color_map import map_color_to_ascii
-from mpl_ascii.draw import draw_bar, draw_frame, draw_line, draw_x_ticks, draw_y_ticks
-from mpl_ascii.tools import linear_transform
+from mpl_ascii.color_map import Char, ax_color_map
+from mpl_ascii.draw import draw_ax
+
+from rich.console import Console
 
 AXES_WIDTH = 150
 AXES_HEIGHT = 40
+ENABLE_COLORS = True
 
 class RendererAscii(RendererAgg):
 
@@ -45,8 +42,14 @@ def show():
     for manager in Gcf.get_all_fig_managers():
         canvas = manager.canvas
         canvas.draw()
-        string = canvas.to_txt()
-        print(string)
+        console = Console()
+        if ENABLE_COLORS:
+            fig = canvas.to_txt_with_color()
+            console.print(fig, highlight=False)
+        else:
+            fig = canvas.to_txt()
+            print(fig)
+
 
 
 class FigureCanvasAscii(FigureCanvasAgg):
@@ -64,37 +67,29 @@ class FigureCanvasAscii(FigureCanvasAgg):
             self._lastKey = key
         return self.renderer
 
-    def to_txt(self, sep="\n", tw=240, invert=False, threshold=200):
+    def to_txt_with_color(self, sep="\n", tw=240, invert=False, threshold=200):
         self.draw()
 
         figure = self.figure
-
         axes_height = AXES_HEIGHT
         axes_width = AXES_WIDTH
 
-        frame_buffer_left = 1
-        frame_buffer_right = 1
-        frame_buffer_top = 1
-        frame_buffer_bottom = 1
-
-
-        frame_width = axes_width + frame_buffer_left + frame_buffer_right
-        frame_height = axes_height + frame_buffer_top + frame_buffer_bottom
-
         ascii_canvases = []
         for ax in figure.axes:
-            color_to_ascii = map_color_to_ascii(ax)
+            canvas = draw_ax(ax, axes_height, axes_width)
+            color_map = ax_color_map(ax)
+            arr = canvas.array
+            for color in color_map:
+                arr[arr==color_map[color]]=f"[{color}]{color_map[color]}[/{color}]"
+            canvas.array = arr
+            ascii_canvases.append(canvas)
 
-            x_range = ax.get_xlim()
-            if x_range[1] < x_range[0]:
-                x_range = x_range[1], x_range[0]
+        image_canvas = AsciiCanvas()
+        for canvas in ascii_canvases:
+            image_canvas = image_canvas.update(canvas, (image_canvas.shape[0], 0))
 
-            y_range = ax.get_ylim()
-            if y_range[1] < y_range[0]:
-                y_range = y_range[1], y_range[0]
+        return image_canvas
 
-            x_min, x_max = x_range
-            y_min, y_max = y_range
 
     def to_txt(self, sep="\n", tw=240, invert=False, threshold=200):
         self.draw()
@@ -112,15 +107,15 @@ class FigureCanvasAscii(FigureCanvasAgg):
         for canvas in ascii_canvases:
             image_canvas = image_canvas.update(canvas, (image_canvas.shape[0], 0))
 
-        return str(image_canvas)
+        return image_canvas
 
 
     def print_txt(self, filename, **kwargs):
         if isinstance(filename, str):
             with open(filename, "w") as f:
-                f.write(self.to_txt())
+                f.write(str(self.to_txt()))
         else:
-            filename.write(self.to_txt().encode())
+            filename.write(str(self.to_txt()).encode())
 
 
 FigureCanvas = FigureCanvasAscii

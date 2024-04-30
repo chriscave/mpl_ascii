@@ -31,7 +31,20 @@ class AsciiCanvas:
     def __str__(self) -> str:
         res = []
         for row in self.array:
-            res.append("".join(row.tolist()))
+            res.append("".join([str(char) for char in row.tolist()]))
+
+        res = "\n".join(res)
+        return res
+
+    def __rich__(self) -> str:
+        res = []
+        for row in self.array:
+            row_colors = []
+            for char in row:
+                if hasattr(char, "__rich__"):
+                    char = char.__rich__()
+                row_colors.append(char)
+            res.append("".join(row_colors))
 
         res = "\n".join(res)
         return res
