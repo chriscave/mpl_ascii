@@ -1,0 +1,55 @@
+                                                                                                                                                             
+                                                                                                                                                             
+     +------------------------------------------------------------------------------------------------------------------------------------------------------+
+   6--                                                                                                                                                      |
+     |                                                                                                                                                      |
+     |                                                                                                                               |              |       |
+     |                                                                                                                |              |       +++++++|       |
+     |                                                                                                                |       +++++++|+++++++       |       |
+     |                                                                                                 |       +++++++|+++++++       |                      |
+   5--                                                                                          +++++++|+++++++       |                                     |
+     |                                                                               +++|+++++++       |                                                    |
+     |                                                                   |   ++++++++   |                                                                   |
+     |                                                                +++|+++                                                                ooooooo|       |
+     |                                                        ++++++++   |                                                    ooooooo|ooooooo       |       |
+     |                                                  ++|+++                                                 ooooooo|ooooooo       |                      |
+   4--                                             +++++  |                                         ooo|ooooooo       |                                     |
+     |                                     |  +++++                                         oooooooo   |                                                    |
+     |                                  +++|++                                   ooooooo|ooo                                                                |
+     |                      |   ++++++++                              ooo|ooooooo                                                            aaaaaaa|       |
+     |                   +++|+++                              oooooooo   |                                                    aaaaaaa|aaaaaaa               |
+     |           ++++++++                               oo|ooo                                                 aaaaaaa|aaaaaaa                              |
+   3--       |+++                                  ooooo  |                                         aaa|aaaaaaa                                             |
+     |       |                                ooooo                                         aaaaaaaa                                                        |
+     |                                  ooo|oo                                       aaa|aaa                                                        |       |
+     |                          oooooooo                                     aaaaaaaa                                                               |       |
+     |                    oo|ooo                                      aaa|aaa                                         |       rrrrrrr|rrrrrrrrrrrrrr|       |
+     |               ooooo  |                                 aaaaaaaa                                         rrrrrrr|rrrrrrr       |                      |
+     |          ooooo                                  aaa|aaa                                      rrr|rrrrrrr                                             |
+   2--       |oo                               aaaaaaaa                                 |   rrrrrrrr   |                                                    |
+     |                                  aaa|aaa                                      rrr|rrr                                                                |
+     |                          aaaaaaaa                                     rrrrrrrr                                                                       |
+     |                    aa|aaa                                      rrr|rrr                                                                               |
+     |               aaaaa                                |   rrrrrrrr   |                                                                                  |
+     |          aaaaa                                  rrr|rrr                                                                                              |
+   1--       |aa                               rrrrrrrr                                                                                                     |
+     |                                  rrr|rrr                                                                                                             |
+     |                          rrrrrrrr   |                                                                                                                |
+     |                    rr|rrr                                                                                                                            |
+     |               rrrrr                                                                                                                                  |
+     |          rrrrr                                                                                                                                       |
+   0--       |rr                                                                                                                                            |
+     |                                                                                                                                                      |
+     |                                                                                                                                                      |
+     +-------|-----------------------------|-----------------------------|-----------------------------|-----------------------------|----------------------+
+             0                             2                             4                             6                             8                       
+                                                                                                                                                             
+                                                                                                                                                             
+                                                                              +----------------------------------+                                           
+                                                                              | Legend                           |                                           
+                                                                              |                                  |                                           
+                                                                              |     both limits (default)        |                                           
+                                                                              |     uplims=True                  |                                           
+                                                                              |     uplims=True, lolims=True     |                                           
+                                                                              |     subsets of uplims and lolims |                                           
+                                                                              +----------------------------------+                                           
