@@ -1,12 +1,12 @@
 import math
 from matplotlib.collections import PathCollection
-from matplotlib.container import BarContainer
+from matplotlib.container import BarContainer, ErrorbarContainer
 from matplotlib.lines import Line2D
 from matplotlib.patches import Rectangle
 import numpy as np
 
 from mpl_ascii.ascii_canvas import AsciiCanvas
-from mpl_ascii.color_map import ax_color_map, std_color
+from mpl_ascii.color_map import Char, ax_color_map, std_color
 from mpl_ascii.tools import linear_transform, scale_factor
 
 def draw_ax(ax, axes_height, axes_width):
@@ -63,8 +63,17 @@ def draw_ax(ax, axes_height, axes_width):
 
         canvas = canvas.update(canvas_bar, (axes_height - ascii_y_bar - canvas_bar.shape[0]+1, ascii_x_bar))
 
+    errorbar_caplines = []
+    for container in ax.containers:
+        if not isinstance(container, ErrorbarContainer):
+            continue
+        _, caplines, _ = tuple(container)
+        errorbar_caplines += [*caplines]
+
 
     for line in ax.get_lines():
+        if line in errorbar_caplines:
+            continue
         char = color_to_ascii[std_color(line.get_color())]
         xy_data = line.get_xydata()
         x_data, y_data = [dat[0] for dat in xy_data], [dat[1] for dat in xy_data]
@@ -82,6 +91,31 @@ def draw_ax(ax, axes_height, axes_width):
         )
 
         canvas = canvas.update(line, (0,0))
+
+    for container in ax.containers:
+        if not isinstance(container, ErrorbarContainer):
+            continue
+        _, _, barlinescols = tuple(container)
+
+        for collection in barlinescols:
+            for xy in collection.get_segments():
+                x_data = [p[0] for p in xy]
+                y_data = [p[1] for p in xy]
+                char = Char("-", "white")
+
+                if len(set(x_data)) == 1:
+                    char = Char("|", "white")
+
+                errorbar = AsciiCanvas(draw_line(
+                    width=axes_width,
+                    height=axes_height,
+                    x_data=x_data,
+                    y_data=y_data,
+                    x_range=x_range,
+                    y_range=y_range,
+                    char = char
+                ))
+                canvas = canvas.update(errorbar, (0,0))
 
     for collection in ax.collections:
         if not isinstance(collection, PathCollection):
