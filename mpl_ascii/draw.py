@@ -71,13 +71,16 @@ def draw_ax(ax, axes_height, axes_width):
         errorbar_caplines += [*caplines]
 
 
+    lines_with_markers = []
     for line in ax.get_lines():
         if line in errorbar_caplines:
             continue
+        if line.get_marker() != "None":
+            lines_with_markers.append(line)
+
         char = color_to_ascii[std_color(line.get_color())]
         xy_data = line.get_xydata()
         x_data, y_data = [dat[0] for dat in xy_data], [dat[1] for dat in xy_data]
-
         line = AsciiCanvas(
                 draw_line(
                 width=axes_width,
@@ -86,7 +89,8 @@ def draw_ax(ax, axes_height, axes_width):
                 y_data=y_data,
                 x_range=x_range,
                 y_range=y_range,
-                char = char
+                char = char,
+                linestyle=line.get_linestyle()
             )
         )
 
@@ -116,6 +120,27 @@ def draw_ax(ax, axes_height, axes_width):
                     char = char
                 ))
                 canvas = canvas.update(errorbar, (0,0))
+
+    for line in lines_with_markers:
+        marker = get_ascii_marker(line.get_marker())
+
+        color = color_to_ascii[std_color(line.get_color())].color
+        char = Char(marker.upper(), color)
+        xy_data = line.get_xydata()
+        x_data, y_data = [dat[0] for dat in xy_data], [dat[1] for dat in xy_data]
+        line = AsciiCanvas(
+                draw_line(
+                width=axes_width,
+                height=axes_height,
+                x_data=x_data,
+                y_data=y_data,
+                x_range=x_range,
+                y_range=y_range,
+                char = char,
+                linestyle="None"
+            )
+        )
+        canvas = canvas.update(line, (0,0))
 
     for collection in ax.collections:
         if not isinstance(collection, PathCollection):
@@ -208,7 +233,7 @@ def draw_frame(height, width):
     return frame
 
 
-def draw_line(height, width, x_data, y_data, x_range, y_range, char):
+def draw_line(height, width, x_data, y_data, x_range, y_range, char, linestyle="-"):
 
     x_min, x_max = x_range[0], x_range[1]
     y_min, y_max = y_range[0], y_range[1]
@@ -233,6 +258,14 @@ def draw_line(height, width, x_data, y_data, x_range, y_range, char):
 
     line_canvas_arr = np.full((height, width), fill_value=" ", dtype="object")
 
+    for x, y in zip(ascii_x_data, ascii_y_data):
+        row = height - y
+        col = x
+        line_canvas_arr[row, col] = char
+
+    if linestyle == "None":
+        return line_canvas_arr
+
     start_points = zip(ascii_x_data[:-1], ascii_y_data[:-1])
     end_points = zip(ascii_x_data[1:], ascii_y_data[1:])
     join_line_points = []
@@ -241,10 +274,6 @@ def draw_line(height, width, x_data, y_data, x_range, y_range, char):
         if len(line_points) > 2:
             join_line_points += line_points[1:-1]
 
-    for x, y in zip(ascii_x_data, ascii_y_data):
-        row = height - y
-        col = x
-        line_canvas_arr[row, col] = char
 
     for x,y in join_line_points:
         row = height - y
@@ -331,5 +360,22 @@ def bresenham_line(x0, y0, x1, y1):
             error += dx
 
     return points
+
+def get_ascii_marker(marker):
+    if marker == "s":
+        marker = chr(9632)
+    if marker == "o":
+        marker = "O"
+    if marker == "v" or marker == "1":
+        marker = chr(9660)
+    if marker == "^" or marker == "2":
+        marker = chr(9650)
+    if marker == "<" or marker == "3":
+        marker = chr(9664)
+    if marker == ">" or marker == "4":
+        marker = chr(9654)
+
+    return marker
+
 
 
