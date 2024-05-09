@@ -62,4 +62,16 @@ test: $(patsubst %,test-%.success,$(ALL_PLOTS_NAMES))
 	@true
 
 
+venv-dev:
+	eval "$$(pyenv init -)"; \
+	pyenv shell 3.10; \
+	python -m venv $@; \
+	. $@/bin/activate; \
+	pip install -r requirements.txt
 
+venv-%:
+	eval "$$(pyenv init -)"; \
+	pyenv shell $*; \
+	python -m venv $@; \
+	. $@/bin/activate; \
+	pip install .; \
