@@ -1,14 +1,14 @@
+from typing import Optional
 from matplotlib._pylab_helpers import Gcf
 
 from matplotlib.backends.backend_agg import (
     FigureManagerBase,
-    RendererAgg,
     FigureCanvasAgg,
 )
 from matplotlib.figure import Figure
 
 from mpl_ascii.ascii_canvas import AsciiCanvas
-from mpl_ascii.color_map import Char, ax_color_map
+from mpl_ascii.color_map import ax_color_map
 from mpl_ascii.draw import draw_ax
 
 from rich.console import Console
@@ -16,27 +16,6 @@ from rich.console import Console
 AXES_WIDTH = 150
 AXES_HEIGHT = 40
 ENABLE_COLORS = True
-
-class RendererAscii(RendererAgg):
-
-    def __init__(self, width, height, dpi):
-        super(RendererAscii, self).__init__(width, height, dpi)
-        self.texts = []
-        self.tick_info = []
-
-    def clear(self):
-        super(RendererAscii, self).clear()
-        self.texts = []
-        self.tick_info = []
-
-    def draw_text(self, gc, x, y, s, prop, angle, ismath=False, mtext=None):
-        super(RendererAscii, self).draw_text(
-            gc, x, y, s, prop, angle, ismath=ismath, mtext=mtext
-        )
-
-        if mtext is not None:
-            self.texts.append(mtext)
-
 
 def show():
     for manager in Gcf.get_all_fig_managers():
@@ -54,18 +33,8 @@ def show():
 
 class FigureCanvasAscii(FigureCanvasAgg):
 
-    def __init__(self, figure: Figure | None = ...) -> None:
+    def __init__(self, figure: Optional[Figure] = ...) -> None:
         super().__init__(figure)
-        self.tick_info = []
-
-    def get_renderer(self):
-        w, h = self.figure.bbox.size
-        key = w, h, self.figure.dpi
-        reuse_renderer = self._lastKey == key
-        if not reuse_renderer:
-            self.renderer = RendererAscii(w, h, self.figure.dpi)
-            self._lastKey = key
-        return self.renderer
 
     def to_txt_with_color(self, sep="\n", tw=240, invert=False, threshold=200):
         self.draw()
