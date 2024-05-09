@@ -7,5 +7,5 @@ pytest >= 7.4.4
 
 # Build requirements
 setuptools >= 62
-twine >= 5
-build >= 1.2.1
+twine >= 4.0.2
+build >= 1.1.1
