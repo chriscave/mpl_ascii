@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=62"]
+requires = ["setuptools>=62", "setuptools_scm>=8"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -9,7 +9,8 @@ dependencies = [
 "matplotlib>=3.5.3",
 "rich>=13.7.1"
 ]
-version = "0.4.0"
+dynamic = ["version"]
+
 description = "A matplotlib backend that produces plots using only ASCII characters"
 license = {text = "MIT License"}
 readme = "README.md"
@@ -20,6 +21,8 @@ authors = [
 maintainers = [
     {name = "Chris Cave"}
 ]
+
+[tool.setuptools_scm]
 
 [project.urls]
 Homepage = "https://github.com/chriscave/mpl_ascii"
