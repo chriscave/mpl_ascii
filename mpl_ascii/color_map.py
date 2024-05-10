@@ -1,5 +1,5 @@
 import matplotlib
-from matplotlib.collections import PathCollection
+from matplotlib.collections import LineCollection, PathCollection, PolyCollection
 from matplotlib.container import BarContainer
 from matplotlib.patches import Rectangle
 
@@ -79,6 +79,22 @@ def ax_color_map(ax):
         if color in color_to_ascii:
             continue
         color_to_ascii[color] = Char(next(gen), color)
+
+    for collection in ax.collections:
+        if isinstance(collection, PolyCollection):
+            for color in collection.get_facecolor():
+                color = std_color(tuple(color.tolist()))
+                if color in color_to_ascii:
+                    continue
+                color_to_ascii[color] = Char(next(gen), color)
+
+        if isinstance(collection, LineCollection):
+            for color in collection.get_color():
+                color = std_color(tuple(color.tolist()))
+                if color in color_to_ascii:
+                    continue
+                color_to_ascii[color] = Char(next(gen), color)
+
 
 
     gen = ascii_chars(scatter_chars)
