@@ -1,6 +1,6 @@
 # mpl_ascii
 
-A matplotlib backend that produces plots using only ASCII characters. It is available for python 3.10+.
+A matplotlib backend that produces plots using only ASCII characters. It is available for python 3.7+.
 
 ## Quick start
 
