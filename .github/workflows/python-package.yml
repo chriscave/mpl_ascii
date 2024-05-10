@@ -63,6 +63,7 @@ jobs:
 
   download-and-test:
     needs: build-and-publish
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
