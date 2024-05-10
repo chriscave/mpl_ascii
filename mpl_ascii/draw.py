@@ -33,7 +33,15 @@ def draw_ax(ax, axes_height, axes_width):
 
     canvas = AsciiCanvas(np.full((axes_height, axes_width), fill_value=" "))
 
-    all_bars = []
+    errorbar_caplines = []
+    error_barlinescols = []
+    for container in ax.containers:
+        if not isinstance(container, ErrorbarContainer):
+            continue
+        _, caplines, barlinescols = tuple(container)
+        errorbar_caplines += [*caplines]
+        error_barlinescols += [*barlinescols]
+
 
     for container in ax.containers:
         if not isinstance(container, BarContainer):
@@ -41,33 +49,25 @@ def draw_ax(ax, axes_height, axes_width):
         for bar in container.patches:
             if not isinstance(bar, Rectangle):
                 continue
-            all_bars.append(bar)
 
-    for bar in all_bars:
-        char = color_to_ascii[std_color(bar.get_facecolor())]
+            char = color_to_ascii[std_color(bar.get_facecolor())]
 
-        canvas_bar = AsciiCanvas(
-                draw_bar(
-                bar.get_height(),
-                bar.get_width(),
-                axes_height,
-                axes_width,
-                x_range,
-                y_range,
-                char
+            canvas_bar = AsciiCanvas(
+                    draw_bar(
+                    bar.get_height(),
+                    bar.get_width(),
+                    axes_height,
+                    axes_width,
+                    x_range,
+                    y_range,
+                    char
+                )
             )
-        )
-        ascii_x_bar = round(linear_transform(bar.xy[0], x_min, x_max, 0, axes_width-1))
-        ascii_y_bar = round(linear_transform(bar.xy[1], y_min, y_max, 1, axes_height))
+            ascii_x_bar = round(linear_transform(bar.xy[0], x_min, x_max, 0, axes_width-1))
+            ascii_y_bar = round(linear_transform(bar.xy[1], y_min, y_max, 1, axes_height))
 
-        canvas = canvas.update(canvas_bar, (axes_height - ascii_y_bar - canvas_bar.shape[0]+1, ascii_x_bar))
+            canvas = canvas.update(canvas_bar, (axes_height - ascii_y_bar - canvas_bar.shape[0]+1, ascii_x_bar))
 
-    errorbar_caplines = []
-    for container in ax.containers:
-        if not isinstance(container, ErrorbarContainer):
-            continue
-        _, caplines, _ = tuple(container)
-        errorbar_caplines += [*caplines]
 
 
     lines_with_markers = []
@@ -95,33 +95,29 @@ def draw_ax(ax, axes_height, axes_width):
 
         canvas = canvas.update(line, (0,0))
 
-    error_barlinescols = []
     for container in ax.containers:
-        if not isinstance(container, ErrorbarContainer):
-            continue
-        _, _, barlinescols = tuple(container)
+        if isinstance(container, ErrorbarContainer):
+            _, _, barlinescols = tuple(container)
 
-        error_barlinescols += [*barlinescols]
+            for collection in barlinescols:
+                for xy in collection.get_segments():
+                    x_data = [p[0] for p in xy]
+                    y_data = [p[1] for p in xy]
+                    char = Char("-", "white")
 
-        for collection in barlinescols:
-            for xy in collection.get_segments():
-                x_data = [p[0] for p in xy]
-                y_data = [p[1] for p in xy]
-                char = Char("-", "white")
+                    if len(set(x_data)) == 1:
+                        char = Char("|", "white")
 
-                if len(set(x_data)) == 1:
-                    char = Char("|", "white")
-
-                errorbar = AsciiCanvas(draw_line(
-                    width=axes_width,
-                    height=axes_height,
-                    x_data=x_data,
-                    y_data=y_data,
-                    x_range=x_range,
-                    y_range=y_range,
-                    char = char
-                ))
-                canvas = canvas.update(errorbar, (0,0))
+                    errorbar = AsciiCanvas(draw_line(
+                        width=axes_width,
+                        height=axes_height,
+                        x_data=x_data,
+                        y_data=y_data,
+                        x_range=x_range,
+                        y_range=y_range,
+                        char = char
+                    ))
+                    canvas = canvas.update(errorbar, (0,0))
 
     for line in lines_with_markers:
         marker = get_ascii_marker(line.get_marker())
@@ -184,18 +180,17 @@ def draw_ax(ax, axes_height, axes_width):
                 )
                 canvas = canvas.update(line, (0,0))
 
-        if not isinstance(collection, PathCollection):
-            continue
-        offsets = collection.get_offsets()
+        if isinstance(collection, PathCollection):
+            offsets = collection.get_offsets()
 
-        color = collection.get_facecolors()[0]
-        for point in offsets:
-            color = tuple(color)
+            color = collection.get_facecolors()[0]
+            for point in offsets:
+                color = tuple(color)
 
-            x_new = round(linear_transform(point[0], x_min, x_max, 0, axes_width-1))
-            y_new = round(linear_transform(point[1], y_min, y_max, 1, axes_height))
+                x_new = round(linear_transform(point[0], x_min, x_max, 0, axes_width-1))
+                y_new = round(linear_transform(point[1], y_min, y_max, 1, axes_height))
 
-            canvas = canvas.update(AsciiCanvas(np.array([[color_to_ascii[std_color(color)]]])), (axes_height-y_new, x_new))
+                canvas = canvas.update(AsciiCanvas(np.array([[color_to_ascii[std_color(color)]]])), (axes_height-y_new, x_new))
 
 
 
