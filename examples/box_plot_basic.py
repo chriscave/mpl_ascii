@@ -44,7 +44,7 @@ if __name__ == "__main__":
     axs[2].boxplot(data, 0, 'rs', 0)
     axs[2].set_title('horizontal boxes')
 
-    # if out:
-    #     fig.savefig(out)
+    if out:
+        fig.savefig(out)
 
     plt.show()
