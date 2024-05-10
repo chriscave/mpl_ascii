@@ -1,4 +1,4 @@
-from matplotlib.collections import PathCollection
+from matplotlib.collections import LineCollection, PathCollection, PolyCollection
 from matplotlib.container import BarContainer, ErrorbarContainer
 from matplotlib.lines import Line2D
 from matplotlib.patches import Rectangle
@@ -95,10 +95,13 @@ def draw_ax(ax, axes_height, axes_width):
 
         canvas = canvas.update(line, (0,0))
 
+    error_barlinescols = []
     for container in ax.containers:
         if not isinstance(container, ErrorbarContainer):
             continue
         _, _, barlinescols = tuple(container)
+
+        error_barlinescols += [*barlinescols]
 
         for collection in barlinescols:
             for xy in collection.get_segments():
@@ -142,6 +145,45 @@ def draw_ax(ax, axes_height, axes_width):
         canvas = canvas.update(line, (0,0))
 
     for collection in ax.collections:
+        if isinstance(collection, PolyCollection):
+            char = color_to_ascii[std_color(collection.get_facecolor())]
+            for path in collection.get_paths():
+                xy_data = path.vertices
+                x_data, y_data = [dat[0] for dat in xy_data], [dat[1] for dat in xy_data]
+                line = AsciiCanvas(
+                    draw_line(
+                    width=axes_width,
+                    height=axes_height,
+                    x_data=x_data,
+                    y_data=y_data,
+                    x_range=x_range,
+                    y_range=y_range,
+                    char = char,
+                    )
+                )
+                canvas = canvas.update(line, (0,0))
+
+        if isinstance(collection, LineCollection):
+            if collection in error_barlinescols:
+                continue
+
+            for xy in collection.get_segments():
+                x_data = [p[0] for p in xy]
+                y_data = [p[1] for p in xy]
+                char = color_to_ascii[std_color(collection.get_color())]
+                line = AsciiCanvas(
+                    draw_line(
+                    width=axes_width,
+                    height=axes_height,
+                    x_data=x_data,
+                    y_data=y_data,
+                    x_range=x_range,
+                    y_range=y_range,
+                    char = char,
+                    )
+                )
+                canvas = canvas.update(line, (0,0))
+
         if not isinstance(collection, PathCollection):
             continue
         offsets = collection.get_offsets()
