@@ -1,4 +1,3 @@
-import math
 from matplotlib.collections import PathCollection
 from matplotlib.container import BarContainer, ErrorbarContainer
 from matplotlib.lines import Line2D
@@ -75,7 +74,7 @@ def draw_ax(ax, axes_height, axes_width):
     for line in ax.get_lines():
         if line in errorbar_caplines:
             continue
-        if line.get_marker() != "None":
+        if line.get_marker() != "None" and line.get_marker() != "":
             lines_with_markers.append(line)
 
         char = color_to_ascii[std_color(line.get_color())]
