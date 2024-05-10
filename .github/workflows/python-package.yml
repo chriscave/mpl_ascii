@@ -60,3 +60,22 @@ jobs:
     - name: Publish to Private PyPI
       run: |
         python -m twine upload --repository-url https://pypi.fury.io/chriscave/ -u ${{ secrets.GEMFURY_UPLOAD_PYPI_API }} -p  dist/*
+
+  download-and-test:
+    needs: build-and-publish
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+      steps:
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install --pre --index-url https://${{ secrets.GEMFURY_DOWNLOAD_PYPI_API }}:@pypi.fury.io/chriscave/ --extra-index-url https://pypi.org/simple mpl_ascii
+      - name: Test package
+        run: |
+          python -c "import mpl_ascii"
