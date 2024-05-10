@@ -15,8 +15,6 @@ if __name__ == "__main__":
 
     import matplotlib.pyplot as plt
 
-    import matplotlib.pyplot as plt
-
     # Example data
     fruits = ['apple', 'blueberry', 'cherry', 'orange']
     counts = [10, 15, 7, 5]
