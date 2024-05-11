@@ -10,6 +10,8 @@ from mpl_ascii.ascii_canvas import AsciiCanvas
 from mpl_ascii.color_map import Char, ax_color_map, std_color
 from mpl_ascii.tools import linear_transform, scale_factor
 
+import mpl_ascii
+
 def draw_ax(ax, axes_height, axes_width):
     frame_buffer_left = 1
     frame_buffer_right = 1
@@ -148,23 +150,24 @@ def draw_ax(ax, axes_height, axes_width):
 
     for collection in ax.collections:
         # Contour plot
-        if isinstance(collection, QuadContourSet):
-            for seg in collection.allsegs:
-                for xy_data in seg:
+        if mpl_ascii.UNRELEASED:
+            if isinstance(collection, QuadContourSet):
+                for seg in collection.allsegs:
+                    for xy_data in seg:
 
-                    x_data, y_data = [dat[0] for dat in xy_data], [dat[1] for dat in xy_data]
-                    line = AsciiCanvas(
-                            draw_line(
-                            width=axes_width,
-                            height=axes_height,
-                            x_data=x_data,
-                            y_data=y_data,
-                            x_range=x_range,
-                            y_range=y_range,
-                            char = "-",
+                        x_data, y_data = [dat[0] for dat in xy_data], [dat[1] for dat in xy_data]
+                        line = AsciiCanvas(
+                                draw_line(
+                                width=axes_width,
+                                height=axes_height,
+                                x_data=x_data,
+                                y_data=y_data,
+                                x_range=x_range,
+                                y_range=y_range,
+                                char = "-",
+                            )
                         )
-                    )
-                    canvas = canvas.update(line, (0,0))
+                        canvas = canvas.update(line, (0,0))
 
         # Violin Plots
         if isinstance(collection, PolyCollection):
@@ -220,15 +223,16 @@ def draw_ax(ax, axes_height, axes_width):
 
                 canvas = canvas.update(AsciiCanvas(np.array([[color_to_ascii[std_color(color)]]])), (axes_height-y_new, x_new))
 
-    for text in ax.texts:
-        if isinstance(text, Annotation):
-            continue
-        if isinstance(text, Text):
-            text_xy = text.get_position()
-            text_canvas = AsciiCanvas(np.array([list(text.get_text())]))
-            ascii_x = round(linear_transform(text_xy[0], x_min, x_max, 0, axes_width-1))
-            ascii_y = round(linear_transform(text_xy[1], y_min, y_max, 1, axes_height))
-            canvas = canvas.update(text_canvas, (axes_height - ascii_y, ascii_x))
+    if mpl_ascii.UNRELEASED:
+        for text in ax.texts:
+            if isinstance(text, Annotation):
+                continue
+            if isinstance(text, Text):
+                text_xy = text.get_position()
+                text_canvas = AsciiCanvas(np.array([list(text.get_text())]))
+                ascii_x = round(linear_transform(text_xy[0], x_min, x_max, 0, axes_width-1))
+                ascii_y = round(linear_transform(text_xy[1], y_min, y_max, 1, axes_height))
+                canvas = canvas.update(text_canvas, (axes_height - ascii_y, ascii_x))
 
     # Add frame
     canvas = canvas.update(AsciiCanvas(draw_frame(frame_height, frame_width)), (-frame_buffer_left,-frame_buffer_top))

@@ -17,6 +17,8 @@ AXES_WIDTH = 150
 AXES_HEIGHT = 40
 ENABLE_COLORS = True
 
+UNRELEASED = False
+
 def show():
     for manager in Gcf.get_all_fig_managers():
         canvas = manager.canvas
