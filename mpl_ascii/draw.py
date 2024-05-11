@@ -1,7 +1,9 @@
 from matplotlib.collections import LineCollection, PathCollection, PolyCollection
 from matplotlib.container import BarContainer, ErrorbarContainer
+from matplotlib.contour import QuadContourSet
 from matplotlib.lines import Line2D
 from matplotlib.patches import Rectangle
+from matplotlib.text import Annotation, Text
 import numpy as np
 
 from mpl_ascii.ascii_canvas import AsciiCanvas
@@ -44,6 +46,7 @@ def draw_ax(ax, axes_height, axes_width):
 
 
     for container in ax.containers:
+        # Draw Bar chart
         if not isinstance(container, BarContainer):
             continue
         for bar in container.patches:
@@ -71,6 +74,7 @@ def draw_ax(ax, axes_height, axes_width):
 
 
     lines_with_markers = []
+    # Draw lines
     for line in ax.get_lines():
         if line in errorbar_caplines:
             continue
@@ -96,6 +100,7 @@ def draw_ax(ax, axes_height, axes_width):
         canvas = canvas.update(line, (0,0))
 
     for container in ax.containers:
+        # Add errorbars
         if isinstance(container, ErrorbarContainer):
             _, _, barlinescols = tuple(container)
 
@@ -119,6 +124,7 @@ def draw_ax(ax, axes_height, axes_width):
                     ))
                     canvas = canvas.update(errorbar, (0,0))
 
+    # Add lines with markers
     for line in lines_with_markers:
         marker = get_ascii_marker(line.get_marker())
 
@@ -141,6 +147,26 @@ def draw_ax(ax, axes_height, axes_width):
         canvas = canvas.update(line, (0,0))
 
     for collection in ax.collections:
+        # Contour plot
+        if isinstance(collection, QuadContourSet):
+            for seg in collection.allsegs:
+                for xy_data in seg:
+
+                    x_data, y_data = [dat[0] for dat in xy_data], [dat[1] for dat in xy_data]
+                    line = AsciiCanvas(
+                            draw_line(
+                            width=axes_width,
+                            height=axes_height,
+                            x_data=x_data,
+                            y_data=y_data,
+                            x_range=x_range,
+                            y_range=y_range,
+                            char = "-",
+                        )
+                    )
+                    canvas = canvas.update(line, (0,0))
+
+        # Violin Plots
         if isinstance(collection, PolyCollection):
             char = color_to_ascii[std_color(collection.get_facecolor())]
             for path in collection.get_paths():
@@ -159,6 +185,7 @@ def draw_ax(ax, axes_height, axes_width):
                 )
                 canvas = canvas.update(line, (0,0))
 
+        # Violin Plots
         if isinstance(collection, LineCollection):
             if collection in error_barlinescols:
                 continue
@@ -180,6 +207,7 @@ def draw_ax(ax, axes_height, axes_width):
                 )
                 canvas = canvas.update(line, (0,0))
 
+        # Add scatter plot
         if isinstance(collection, PathCollection):
             offsets = collection.get_offsets()
 
@@ -192,16 +220,20 @@ def draw_ax(ax, axes_height, axes_width):
 
                 canvas = canvas.update(AsciiCanvas(np.array([[color_to_ascii[std_color(color)]]])), (axes_height-y_new, x_new))
 
+    for text in ax.texts:
+        if isinstance(text, Annotation):
+            continue
+        if isinstance(text, Text):
+            text_xy = text.get_position()
+            text_canvas = AsciiCanvas(np.array([list(text.get_text())]))
+            ascii_x = round(linear_transform(text_xy[0], x_min, x_max, 0, axes_width-1))
+            ascii_y = round(linear_transform(text_xy[1], y_min, y_max, 1, axes_height))
+            canvas = canvas.update(text_canvas, (axes_height - ascii_y, ascii_x))
 
-
-    # for text in ax.texts:
-    #     text_canvas = AsciiCanvas(np.array([list(text.get_text())]))
-    #     ascii_x = round(linear_transform(text.xy[0], x_min, x_max, 0, axes_width-1))
-    #     ascii_y = round(linear_transform(text.xy[1], y_min, y_max, 1, axes_height))
-    #     canvas = canvas.update(text_canvas, (axes_height - ascii_y, ascii_x))
-
+    # Add frame
     canvas = canvas.update(AsciiCanvas(draw_frame(frame_height, frame_width)), (-frame_buffer_left,-frame_buffer_top))
 
+    # Add xticks and labels
     tick_data = [tick.get_position()[0] for tick in ax.xaxis.get_ticklabels()]
     label_data = [tick.get_text().replace("\n", "") for tick in ax.xaxis.get_ticklabels()]
     xticks = AsciiCanvas(draw_x_ticks(axes_width, tick_data, label_data, x_range))
@@ -212,6 +244,7 @@ def draw_ax(ax, axes_height, axes_width):
 
     canvas = canvas.update(xticks_and_label, location=(canvas.shape[0]-1, 1))
 
+    # Add yticks and labels
     tick_data = [tick.get_loc() for tick in ax.yaxis.get_major_ticks()]
     label_data = [tick.label1.get_text().replace("\n", "") for tick in ax.yaxis.get_major_ticks()]
     yticks = AsciiCanvas(draw_y_ticks(axes_height, tick_data, label_data, y_range))
@@ -221,10 +254,11 @@ def draw_ax(ax, axes_height, axes_width):
 
     canvas = canvas.update(yticks_and_label, location=(1, -yticks_and_label.shape[1]+1))
 
-
+    # Add ax title
     ax_title = AsciiCanvas(np.array([list(ax.get_title())]))
     canvas = canvas.update(ax_title, location=(-(ax_title.shape[0] + 1), int(canvas.shape[1] / 2)))
 
+    # Add legend
     legend = ax.get_legend()
     if legend:
         handles, text = legend.legendHandles, legend.texts
