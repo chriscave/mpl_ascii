@@ -214,14 +214,20 @@ def draw_ax(ax, axes_height, axes_width):
         if isinstance(collection, PathCollection):
             offsets = collection.get_offsets()
 
-            color = collection.get_facecolors()[0]
+            if len(collection.get_facecolor()) > 0:
+                color = collection.get_facecolor()[0]
+
+            if len(collection.get_edgecolor()) > 0:
+                color = collection.get_edgecolor()[0]
+
             for point in offsets:
                 color = tuple(color)
 
                 x_new = round(linear_transform(point[0], x_min, x_max, 0, axes_width-1))
                 y_new = round(linear_transform(point[1], y_min, y_max, 1, axes_height))
 
-                canvas = canvas.update(AsciiCanvas(np.array([[color_to_ascii[std_color(color)]]])), (axes_height-y_new, x_new))
+                char = color_to_ascii.get(std_color(color), Char("+", "white"))
+                canvas = canvas.update(AsciiCanvas(np.array([[char]])), (axes_height-y_new, x_new))
 
     if mpl_ascii.UNRELEASED:
         for text in ax.texts:

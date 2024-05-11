@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Fixed
+
+- Contour plots will return empty frame instead of raising an error.
+
 ### Added
 
 - Add support for contour plots without colors.
