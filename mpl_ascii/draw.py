@@ -1,4 +1,5 @@
-from matplotlib.collections import LineCollection, PathCollection, PolyCollection
+from matplotlib.collections import LineCollection, PathCollection, PolyCollection, QuadMesh
+from matplotlib.colors import Colormap, ListedColormap, Normalize
 from matplotlib.container import BarContainer, ErrorbarContainer
 from matplotlib.contour import QuadContourSet
 from matplotlib.lines import Line2D
@@ -32,268 +33,39 @@ def draw_ax(ax, axes_height, axes_width):
     if y_range[1] < y_range[0]:
         y_range = y_range[1], y_range[0]
 
-    x_min, x_max = x_range
-    y_min, y_max = y_range
-
     canvas = AsciiCanvas(np.full((axes_height, axes_width), fill_value=" "))
 
-    errorbar_caplines = []
-    error_barlinescols = []
-    for container in ax.containers:
-        if not isinstance(container, ErrorbarContainer):
-            continue
-        _, caplines, barlinescols = tuple(container)
-        errorbar_caplines += [*caplines]
-        error_barlinescols += [*barlinescols]
+    errorbar_caplines, error_barlinescols = get_errorbars(ax.containers)
 
+    canvas = add_bar_chart(canvas, ax.containers, axes_height, axes_width, x_range, y_range, color_to_ascii)
 
-    for container in ax.containers:
-        # Draw Bar chart
-        if not isinstance(container, BarContainer):
-            continue
-        for bar in container.patches:
-            if not isinstance(bar, Rectangle):
-                continue
+    canvas = add_line_plots(canvas, ax.get_lines(), axes_height, axes_width, x_range, y_range, color_to_ascii, errorbar_caplines)
 
-            char = color_to_ascii[std_color(bar.get_facecolor())]
+    canvas = add_errorbars(canvas, axes_height, axes_width, error_barlinescols, x_range, y_range)
 
-            canvas_bar = AsciiCanvas(
-                    draw_bar(
-                    bar.get_height(),
-                    bar.get_width(),
-                    axes_height,
-                    axes_width,
-                    x_range,
-                    y_range,
-                    char
-                )
-            )
-            ascii_x_bar = round(linear_transform(bar.xy[0], x_min, x_max, 0, axes_width-1))
-            ascii_y_bar = round(linear_transform(bar.xy[1], y_min, y_max, 1, axes_height))
+    lines_with_markers = get_lines_with_markers(ax.get_lines(), errorbar_caplines)
 
-            canvas = canvas.update(canvas_bar, (axes_height - ascii_y_bar - canvas_bar.shape[0]+1, ascii_x_bar))
-
-
-
-    lines_with_markers = []
-    # Draw lines
-    for line in ax.get_lines():
-        if line in errorbar_caplines:
-            continue
-        if line.get_marker() != "None" and line.get_marker() != "":
-            lines_with_markers.append(line)
-
-        char = color_to_ascii[std_color(line.get_color())]
-        xy_data = line.get_xydata()
-        x_data, y_data = [dat[0] for dat in xy_data], [dat[1] for dat in xy_data]
-        line = AsciiCanvas(
-                draw_line(
-                width=axes_width,
-                height=axes_height,
-                x_data=x_data,
-                y_data=y_data,
-                x_range=x_range,
-                y_range=y_range,
-                char = char,
-                linestyle=line.get_linestyle()
-            )
-        )
-
-        canvas = canvas.update(line, (0,0))
-
-    for container in ax.containers:
-        # Add errorbars
-        if isinstance(container, ErrorbarContainer):
-            _, _, barlinescols = tuple(container)
-
-            for collection in barlinescols:
-                for xy in collection.get_segments():
-                    x_data = [p[0] for p in xy]
-                    y_data = [p[1] for p in xy]
-                    char = Char("-", "white")
-
-                    if len(set(x_data)) == 1:
-                        char = Char("|", "white")
-
-                    errorbar = AsciiCanvas(draw_line(
-                        width=axes_width,
-                        height=axes_height,
-                        x_data=x_data,
-                        y_data=y_data,
-                        x_range=x_range,
-                        y_range=y_range,
-                        char = char
-                    ))
-                    canvas = canvas.update(errorbar, (0,0))
-
-    # Add lines with markers
-    for line in lines_with_markers:
-        marker = get_ascii_marker(line.get_marker())
-
-        color = color_to_ascii[std_color(line.get_color())].color
-        char = Char(marker.upper(), color)
-        xy_data = line.get_xydata()
-        x_data, y_data = [dat[0] for dat in xy_data], [dat[1] for dat in xy_data]
-        line = AsciiCanvas(
-                draw_line(
-                width=axes_width,
-                height=axes_height,
-                x_data=x_data,
-                y_data=y_data,
-                x_range=x_range,
-                y_range=y_range,
-                char = char,
-                linestyle="None"
-            )
-        )
-        canvas = canvas.update(line, (0,0))
-
-    for collection in ax.collections:
-        # Contour plot
-        if mpl_ascii.UNRELEASED:
-            if isinstance(collection, QuadContourSet):
-                for seg in collection.allsegs:
-                    for xy_data in seg:
-
-                        x_data, y_data = [dat[0] for dat in xy_data], [dat[1] for dat in xy_data]
-                        line = AsciiCanvas(
-                                draw_line(
-                                width=axes_width,
-                                height=axes_height,
-                                x_data=x_data,
-                                y_data=y_data,
-                                x_range=x_range,
-                                y_range=y_range,
-                                char = "-",
-                            )
-                        )
-                        canvas = canvas.update(line, (0,0))
-
-        # Violin Plots
-        if isinstance(collection, PolyCollection):
-            char = color_to_ascii[std_color(collection.get_facecolor())]
-            for path in collection.get_paths():
-                xy_data = path.vertices
-                x_data, y_data = [dat[0] for dat in xy_data], [dat[1] for dat in xy_data]
-                line = AsciiCanvas(
-                    draw_line(
-                    width=axes_width,
-                    height=axes_height,
-                    x_data=x_data,
-                    y_data=y_data,
-                    x_range=x_range,
-                    y_range=y_range,
-                    char = char,
-                    )
-                )
-                canvas = canvas.update(line, (0,0))
-
-        # Violin Plots
-        if isinstance(collection, LineCollection):
-            if collection in error_barlinescols:
-                continue
-
-            for xy in collection.get_segments():
-                x_data = [p[0] for p in xy]
-                y_data = [p[1] for p in xy]
-                char = color_to_ascii[std_color(collection.get_color())]
-                line = AsciiCanvas(
-                    draw_line(
-                    width=axes_width,
-                    height=axes_height,
-                    x_data=x_data,
-                    y_data=y_data,
-                    x_range=x_range,
-                    y_range=y_range,
-                    char = char,
-                    )
-                )
-                canvas = canvas.update(line, (0,0))
-
-        # Add scatter plot
-        if isinstance(collection, PathCollection):
-            offsets = collection.get_offsets()
-
-            if len(collection.get_facecolor()) > 0:
-                color = collection.get_facecolor()[0]
-
-            if len(collection.get_edgecolor()) > 0:
-                color = collection.get_edgecolor()[0]
-
-            for point in offsets:
-                color = tuple(color)
-
-                x_new = round(linear_transform(point[0], x_min, x_max, 0, axes_width-1))
-                y_new = round(linear_transform(point[1], y_min, y_max, 1, axes_height))
-
-                char = color_to_ascii.get(std_color(color), Char("+", "white"))
-                canvas = canvas.update(AsciiCanvas(np.array([[char]])), (axes_height-y_new, x_new))
+    canvas = add_line_markers(canvas, axes_height, axes_width, x_range, y_range, color_to_ascii, lines_with_markers)
 
     if mpl_ascii.UNRELEASED:
-        for text in ax.texts:
-            if isinstance(text, Annotation):
-                continue
-            if isinstance(text, Text):
-                text_xy = text.get_position()
-                text_canvas = AsciiCanvas(np.array([list(text.get_text())]))
-                ascii_x = round(linear_transform(text_xy[0], x_min, x_max, 0, axes_width-1))
-                ascii_y = round(linear_transform(text_xy[1], y_min, y_max, 1, axes_height))
-                canvas = canvas.update(text_canvas, (axes_height - ascii_y, ascii_x))
+        canvas = add_contours(canvas, ax.collections, axes_height, axes_width, x_range, y_range, color_to_ascii)
 
-    # Add frame
-    canvas = canvas.update(AsciiCanvas(draw_frame(frame_height, frame_width)), (-frame_buffer_left,-frame_buffer_top))
+    canvas = add_violin_plots(canvas, ax.collections, axes_height, axes_width, x_range, y_range, color_to_ascii, error_barlinescols)
 
-    # Add xticks and labels
-    tick_data = [tick.get_position()[0] for tick in ax.xaxis.get_ticklabels()]
-    label_data = [tick.get_text().replace("\n", "") for tick in ax.xaxis.get_ticklabels()]
-    xticks = AsciiCanvas(draw_x_ticks(axes_width, tick_data, label_data, x_range))
+    canvas = add_scatter_plots(canvas, ax.collections, axes_height, axes_width, x_range, y_range, color_to_ascii)
 
-    xlabel = AsciiCanvas(np.array([list(ax.get_xlabel())]))
+    if mpl_ascii.UNRELEASED:
+        canvas = add_text(canvas, ax.texts, axes_height, axes_width, x_range, y_range)
 
-    xticks_and_label = xticks.update(xlabel, location=(xticks.shape[0],int(xticks.shape[1] / 2)))
+    canvas = add_frame(canvas, frame_height, frame_width, frame_buffer_left, frame_buffer_top)
 
-    canvas = canvas.update(xticks_and_label, location=(canvas.shape[0]-1, 1))
+    canvas = add_xticks_and_labels(canvas, ax, axes_width, x_range)
 
-    # Add yticks and labels
-    tick_data = [tick.get_loc() for tick in ax.yaxis.get_major_ticks()]
-    label_data = [tick.label1.get_text().replace("\n", "") for tick in ax.yaxis.get_major_ticks()]
-    yticks = AsciiCanvas(draw_y_ticks(axes_height, tick_data, label_data, y_range))
+    canvas = add_yticks_and_labels(canvas, ax, axes_height, y_range)
 
-    ylabel = AsciiCanvas(np.array([list(ax.get_ylabel())]).T)
-    yticks_and_label = yticks.update(ylabel, location=(int(yticks.shape[0] / 2), -(ylabel.shape[1] + 1)))
+    canvas = add_ax_title(canvas, ax.get_title())
 
-    canvas = canvas.update(yticks_and_label, location=(1, -yticks_and_label.shape[1]+1))
-
-    # Add ax title
-    ax_title = AsciiCanvas(np.array([list(ax.get_title())]))
-    canvas = canvas.update(ax_title, location=(-(ax_title.shape[0] + 1), int(canvas.shape[1] / 2)))
-
-    # Add legend
-    legend = ax.get_legend()
-    if legend:
-        handles, text = legend.legendHandles, legend.texts
-
-        canvas_legend = AsciiCanvas()
-        for handle, text in zip(handles, text):
-            char = " "
-            if isinstance(handle, Rectangle):
-                char = color_to_ascii[std_color(handle.get_facecolor())]
-            if isinstance(handle, Line2D):
-                char = color_to_ascii[std_color(handle.get_color())]
-            if isinstance(handle, PathCollection):
-                color = tuple(handle.get_facecolor()[0])
-                char = color_to_ascii[std_color(color)]
-
-            arr = np.array([[char] * 3 + [" "] + list(text.get_text())])
-            canvas_legend = canvas_legend.update(AsciiCanvas(arr), (canvas_legend.shape[0], 0))
-
-        title = legend.get_title().get_text() or "Legend"
-        title = AsciiCanvas(np.array([list(title)]))
-        canvas_legend = canvas_legend.update(title, (-2,0))
-        legend_frame = AsciiCanvas(draw_frame(canvas_legend.shape[0]+2, canvas_legend.shape[1]+4))
-        canvas_legend = legend_frame.update(canvas_legend, (1,2))
-
-        canvas = canvas.update(canvas_legend, (canvas.shape[0] + 1, round(canvas.shape[1] / 2) ))
+    canvas = add_legend(canvas, ax.get_legend(), color_to_ascii)
 
     return canvas
 
@@ -457,5 +229,300 @@ def get_ascii_marker(marker):
 
     return marker
 
+def get_errorbars(containers):
+    errorbar_caplines = []
+    error_barlinescols = []
+    for container in containers:
+        if not isinstance(container, ErrorbarContainer):
+            continue
+        _, caplines, barlinescols = tuple(container)
+        errorbar_caplines += [*caplines]
+        error_barlinescols += [*barlinescols]
 
+    return errorbar_caplines, error_barlinescols
 
+def add_bar_chart(canvas, containers, axes_height, axes_width, x_range, y_range, color_to_ascii):
+    x_min, x_max = x_range
+    y_min, y_max = y_range
+
+    for container in containers:
+        # Draw Bar chart
+        if not isinstance(container, BarContainer):
+            continue
+        for bar in container.patches:
+            if not isinstance(bar, Rectangle):
+                continue
+
+            char = color_to_ascii[std_color(bar.get_facecolor())]
+
+            canvas_bar = AsciiCanvas(
+                    draw_bar(
+                    bar.get_height(),
+                    bar.get_width(),
+                    axes_height,
+                    axes_width,
+                    x_range,
+                    y_range,
+                    char
+                )
+            )
+            ascii_x_bar = round(linear_transform(bar.xy[0], x_min, x_max, 0, axes_width-1))
+            ascii_y_bar = round(linear_transform(bar.xy[1], y_min, y_max, 1, axes_height))
+
+            canvas = canvas.update(canvas_bar, (axes_height - ascii_y_bar - canvas_bar.shape[0]+1, ascii_x_bar))
+
+    return canvas
+
+def add_line_plots(canvas, lines, axes_height, axes_width, x_range, y_range, color_to_ascii, errorbar_caplines):
+    for line in lines:
+        if line in errorbar_caplines:
+            continue
+
+        char = color_to_ascii[std_color(line.get_color())]
+        xy_data = line.get_xydata()
+        x_data, y_data = [dat[0] for dat in xy_data], [dat[1] for dat in xy_data]
+        line = AsciiCanvas(
+                draw_line(
+                width=axes_width,
+                height=axes_height,
+                x_data=x_data,
+                y_data=y_data,
+                x_range=x_range,
+                y_range=y_range,
+                char = char,
+                linestyle=line.get_linestyle()
+            )
+        )
+
+        canvas = canvas.update(line, (0,0))
+    return canvas
+
+def get_lines_with_markers(lines, errorbar_caplines):
+    lines_with_markers = []
+    # Draw lines
+    for line in lines:
+        if line in errorbar_caplines:
+            continue
+        if line.get_marker() != "None" and line.get_marker() != "":
+            lines_with_markers.append(line)
+
+    return lines_with_markers
+
+def add_errorbars(canvas, axes_height, axes_width, error_barlinescols, x_range, y_range):
+    for collection in error_barlinescols:
+        for xy in collection.get_segments():
+            x_data = [p[0] for p in xy]
+            y_data = [p[1] for p in xy]
+            char = Char("-", "white")
+
+            if len(set(x_data)) == 1:
+                char = Char("|", "white")
+
+            errorbar = AsciiCanvas(draw_line(
+                width=axes_width,
+                height=axes_height,
+                x_data=x_data,
+                y_data=y_data,
+                x_range=x_range,
+                y_range=y_range,
+                char = char
+            ))
+
+            canvas = canvas.update(errorbar, (0,0))
+    return canvas
+
+def add_line_markers(canvas, axes_height, axes_width, x_range, y_range, color_to_ascii, lines_with_markers):
+    for line in lines_with_markers:
+        marker = get_ascii_marker(line.get_marker())
+
+        color = color_to_ascii[std_color(line.get_color())].color
+        char = Char(marker.upper(), color)
+        xy_data = line.get_xydata()
+        x_data, y_data = [dat[0] for dat in xy_data], [dat[1] for dat in xy_data]
+        line = AsciiCanvas(
+                draw_line(
+                width=axes_width,
+                height=axes_height,
+                x_data=x_data,
+                y_data=y_data,
+                x_range=x_range,
+                y_range=y_range,
+                char = char,
+                linestyle="None"
+            )
+        )
+        canvas = canvas.update(line, (0,0))
+    return canvas
+
+def add_contours(canvas, collections, axes_height, axes_width, x_range, y_range, color_to_ascii):
+    for collection in collections:
+        if isinstance(collection, QuadContourSet):
+            for seg in collection.allsegs:
+                for xy_data in seg:
+
+                    x_data, y_data = [dat[0] for dat in xy_data], [dat[1] for dat in xy_data]
+                    line = AsciiCanvas(
+                            draw_line(
+                            width=axes_width,
+                            height=axes_height,
+                            x_data=x_data,
+                            y_data=y_data,
+                            x_range=x_range,
+                            y_range=y_range,
+                            char = "-",
+                        )
+                    )
+                    canvas = canvas.update(line, (0,0))
+
+    return canvas
+
+def add_violin_plots(canvas, collections, axes_height, axes_width, x_range, y_range, color_to_ascii, error_barlinescols):
+    for collection in collections:
+        # Contour plot
+        if isinstance(collection, PolyCollection):
+            char = color_to_ascii[std_color(collection.get_facecolor())]
+            for path in collection.get_paths():
+                xy_data = path.vertices
+                x_data, y_data = [dat[0] for dat in xy_data], [dat[1] for dat in xy_data]
+                line = AsciiCanvas(
+                    draw_line(
+                    width=axes_width,
+                    height=axes_height,
+                    x_data=x_data,
+                    y_data=y_data,
+                    x_range=x_range,
+                    y_range=y_range,
+                    char = char,
+                    )
+                )
+                canvas = canvas.update(line, (0,0))
+
+        if isinstance(collection, LineCollection):
+            if collection in error_barlinescols:
+                continue
+
+            for xy in collection.get_segments():
+                x_data = [p[0] for p in xy]
+                y_data = [p[1] for p in xy]
+                char = color_to_ascii[std_color(collection.get_color())]
+                line = AsciiCanvas(
+                    draw_line(
+                    width=axes_width,
+                    height=axes_height,
+                    x_data=x_data,
+                    y_data=y_data,
+                    x_range=x_range,
+                    y_range=y_range,
+                    char = char,
+                    )
+                )
+                canvas = canvas.update(line, (0,0))
+    return canvas
+
+def add_scatter_plots(canvas, collections, axes_height, axes_width, x_range, y_range, color_to_ascii):
+    x_min, x_max = x_range
+    y_min, y_max = y_range
+
+    for collection in collections:
+        # Add scatter plot
+        if isinstance(collection, PathCollection):
+            offsets = collection.get_offsets()
+
+            if len(collection.get_facecolor()) > 0:
+                color = collection.get_facecolor()[0]
+
+            if len(collection.get_edgecolor()) > 0:
+                color = collection.get_edgecolor()[0]
+
+            for point in offsets:
+                color = tuple(color)
+
+                x_new = round(linear_transform(point[0], x_min, x_max, 0, axes_width-1))
+                y_new = round(linear_transform(point[1], y_min, y_max, 1, axes_height))
+
+                char = color_to_ascii.get(std_color(color), Char("+", "white"))
+                canvas = canvas.update(AsciiCanvas(np.array([[char]])), (axes_height-y_new, x_new))
+
+    return canvas
+
+def add_text(canvas, texts, axes_height, axes_width, x_range, y_range):
+    x_min, x_max = x_range
+    y_min, y_max = y_range
+
+    for text in texts:
+        if isinstance(text, Annotation):
+            continue
+        if isinstance(text, Text):
+            text_xy = text.get_position()
+            text_canvas = AsciiCanvas(np.array([list(text.get_text())]))
+            ascii_x = round(linear_transform(text_xy[0], x_min, x_max, 0, axes_width-1))
+            ascii_y = round(linear_transform(text_xy[1], y_min, y_max, 1, axes_height))
+            canvas = canvas.update(text_canvas, (axes_height - ascii_y, ascii_x))
+
+    return canvas
+
+def add_frame(canvas, frame_height, frame_width, frame_buffer_left, frame_buffer_top):
+    canvas = canvas.update(AsciiCanvas(draw_frame(frame_height, frame_width)), (-frame_buffer_left,-frame_buffer_top))
+    return canvas
+
+def add_xticks_and_labels(canvas, ax, axes_width, x_range):
+    tick_data = [tick.get_position()[0] for tick in ax.xaxis.get_ticklabels()]
+    label_data = [tick.get_text().replace("\n", "") for tick in ax.xaxis.get_ticklabels()]
+    xticks = AsciiCanvas(draw_x_ticks(axes_width, tick_data, label_data, x_range))
+
+    xlabel = AsciiCanvas(np.array([list(ax.get_xlabel())]))
+
+    xticks_and_label = xticks.update(xlabel, location=(xticks.shape[0],int(xticks.shape[1] / 2)))
+
+    canvas = canvas.update(xticks_and_label, location=(canvas.shape[0]-1, 1))
+    return canvas
+
+def add_yticks_and_labels(canvas, ax, axes_height, y_range):
+
+    # Add yticks and labels
+    tick_data = [tick.get_loc() for tick in ax.yaxis.get_major_ticks()]
+    label_data = [tick.label1.get_text().replace("\n", "") for tick in ax.yaxis.get_major_ticks()]
+    yticks = AsciiCanvas(draw_y_ticks(axes_height, tick_data, label_data, y_range))
+
+    ylabel = AsciiCanvas(np.array([list(ax.get_ylabel())]).T)
+    yticks_and_label = yticks.update(ylabel, location=(int(yticks.shape[0] / 2), -(ylabel.shape[1] + 1)))
+
+    canvas = canvas.update(yticks_and_label, location=(1, -yticks_and_label.shape[1]+1))
+    return canvas
+
+def add_ax_title(canvas, title):
+    ax_title = AsciiCanvas(np.array([list(title)]))
+    canvas = canvas.update(ax_title, location=(-(ax_title.shape[0] + 1), int(canvas.shape[1] / 2)))
+
+    return canvas
+
+def add_legend(canvas, legend, color_to_ascii):
+
+    # Add legend
+
+    if legend:
+        handles, text = legend.legendHandles, legend.texts
+
+        canvas_legend = AsciiCanvas()
+        for handle, text in zip(handles, text):
+            char = " "
+            if isinstance(handle, Rectangle):
+                char = color_to_ascii[std_color(handle.get_facecolor())]
+            if isinstance(handle, Line2D):
+                char = color_to_ascii[std_color(handle.get_color())]
+            if isinstance(handle, PathCollection):
+                color = tuple(handle.get_facecolor()[0])
+                char = color_to_ascii[std_color(color)]
+
+            arr = np.array([[char] * 3 + [" "] + list(text.get_text())])
+            canvas_legend = canvas_legend.update(AsciiCanvas(arr), (canvas_legend.shape[0], 0))
+
+        title = legend.get_title().get_text() or "Legend"
+        title = AsciiCanvas(np.array([list(title)]))
+        canvas_legend = canvas_legend.update(title, (-2,0))
+        legend_frame = AsciiCanvas(draw_frame(canvas_legend.shape[0]+2, canvas_legend.shape[1]+4))
+        canvas_legend = legend_frame.update(canvas_legend, (1,2))
+
+        canvas = canvas.update(canvas_legend, (canvas.shape[0] + 1, round(canvas.shape[1] / 2) ))
+
+    return canvas
