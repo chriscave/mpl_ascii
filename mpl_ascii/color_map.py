@@ -1,6 +1,9 @@
+from typing import Dict
 import matplotlib
-from matplotlib.collections import LineCollection, PathCollection, PolyCollection
+from matplotlib.axes import Axes
+from matplotlib.collections import LineCollection, PathCollection, PolyCollection, QuadMesh
 from matplotlib.container import BarContainer
+from matplotlib.figure import Figure
 from matplotlib.patches import Rectangle
 
 
@@ -51,6 +54,52 @@ class Char:
     def __rich__(self) -> str:
         return f"[{self.color}]{self.character}[/{self.color}]"
 
+class FigureColorMap:
+    def __init__(self, figure: Figure) -> None:
+        self.figure = figure
+
+    def associate_color_bar(self, ax):
+        ax_idx = self.figure.axes.index(ax)
+        if ax_idx == len(self.figure.axes) - 1:
+            return None
+
+        color_bar = self.figure.axes[ax_idx+1]
+        for container in color_bar.collections:
+            if isinstance(container, QuadMesh):
+                return color_bar
+
+        return None
+
+    def __call__(self, ax: Axes) -> Dict:
+        colorbar = self.associate_color_bar(ax)
+        if colorbar is None:
+            return ax_color_map(ax)
+
+        color_bar_map = ax_color_map(colorbar)
+
+        for collection in colorbar.collections:
+            if isinstance(collection, QuadMesh):
+                cmap, norm = collection.cmap, collection.norm
+
+
+
+        tick_data = [tick.get_loc() for tick in colorbar.yaxis.get_major_ticks()]
+
+        color_to_ascii = {}
+        for collection in ax.collections:
+            if isinstance(collection, PathCollection):
+                for val, color in zip(collection.get_array(), collection.get_facecolor()):
+                    min_greater = min([tick for tick in tick_data if tick >= val])
+                    color = std_color(color)
+                    char = color_bar_map[std_color(cmap(norm(min_greater)))]
+                    if color in color_to_ascii:
+                        continue
+                    color_to_ascii[color] = char
+
+        return color_to_ascii
+
+
+
 def ax_color_map(ax):
 
     def ascii_chars(ls):
@@ -68,6 +117,18 @@ def ax_color_map(ax):
             if not isinstance(bar, Rectangle):
                 continue
             color = std_color(bar.get_facecolor())
+            if color in color_to_ascii:
+                continue
+            color_to_ascii[color] = Char(next(gen), color)
+
+    gen = ascii_chars(bar_chars)
+    for container in ax.collections:
+        if not isinstance(container, QuadMesh):
+            continue
+        tick_data = [tick.get_loc() for tick in ax.yaxis.get_major_ticks()]
+        cmap, norm = container.cmap, container.norm
+        for td in tick_data:
+            color = std_color(cmap(norm(td)))
             if color in color_to_ascii:
                 continue
             color_to_ascii[color] = Char(next(gen), color)

@@ -8,7 +8,7 @@ from matplotlib.backends.backend_agg import (
 from matplotlib.figure import Figure
 
 from mpl_ascii.ascii_canvas import AsciiCanvas
-from mpl_ascii.color_map import ax_color_map
+from mpl_ascii.color_map import ax_color_map, FigureColorMap
 from mpl_ascii.draw import draw_ax
 
 from rich.console import Console
@@ -42,13 +42,14 @@ class FigureCanvasAscii(FigureCanvasAgg):
         self.draw()
 
         figure = self.figure
+        fig_color_map = FigureColorMap(figure)
         axes_height = AXES_HEIGHT
         axes_width = AXES_WIDTH
 
         ascii_canvases = []
         for ax in figure.axes:
-            canvas = draw_ax(ax, axes_height, axes_width)
-            color_map = ax_color_map(ax)
+            color_map = fig_color_map(ax)
+            canvas = draw_ax(ax, axes_height, axes_width, color_map)
             arr = canvas.array
             for color in color_map:
                 arr[arr==color_map[color]]=f"[{color}]{color_map[color]}[/{color}]"
@@ -66,12 +67,15 @@ class FigureCanvasAscii(FigureCanvasAgg):
         self.draw()
 
         figure = self.figure
+        fig_color_map = FigureColorMap(figure)
+
         axes_height = AXES_HEIGHT
         axes_width = AXES_WIDTH
 
         ascii_canvases = []
         for ax in figure.axes:
-            canvas = draw_ax(ax, axes_height, axes_width)
+            color_map = fig_color_map(ax)
+            canvas = draw_ax(ax, axes_height, axes_width, color_map)
             ascii_canvases.append(canvas)
 
         image_canvas = AsciiCanvas()
