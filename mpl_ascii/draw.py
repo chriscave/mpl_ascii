@@ -46,39 +46,41 @@ def draw_ax(ax: Axes, axes_height, axes_width, color_to_ascii):
 
     canvas = add_bar_chart(canvas, ax.containers, axes_height, axes_width, x_range, y_range, color_to_ascii)
 
-    for container in ax.collections:
-        if isinstance(container, QuadMesh):
-            color_bar_width = 10
-            axes_width = color_bar_width
-            frame_width = axes_width + frame_buffer_left + frame_buffer_right
+    if mpl_ascii.UNRELEASED:
+
+        for container in ax.collections:
+            if isinstance(container, QuadMesh):
+                color_bar_width = 10
+                axes_width = color_bar_width
+                frame_width = axes_width + frame_buffer_left + frame_buffer_right
 
 
-            bar_chars = color_map.bar_chars
-            tick_data = [tick.get_loc() for tick in ax.yaxis.get_major_ticks()]
-            for char, i in zip(bar_chars, range(1, len(tick_data))):
-                top_value = tick_data[i]
-                bottom_value = tick_data[i-1]
-                if tick_data[i] > y_range[1]:
-                    top_value = y_range[1]
-                top = round(linear_transform(top_value, y_range[0], y_range[1], 1, axes_height))
-                bottom = round(linear_transform(bottom_value, y_range[0], y_range[1], 1, axes_height))
-                cmap, norm = container.cmap, container.norm
-                char = color_to_ascii[std_color(cmap(norm(top_value)))]
-                bar_height = top - bottom
-                if i == 1:
-                    bar_height = top
+                bar_chars = color_map.bar_chars
+                tick_data = [tick.get_loc() for tick in ax.yaxis.get_major_ticks()]
+                for char, i in zip(bar_chars, range(1, len(tick_data))):
+                    top_value = tick_data[i]
+                    bottom_value = tick_data[i-1]
+                    if tick_data[i] > y_range[1]:
+                        top_value = y_range[1]
+                    top = round(linear_transform(top_value, y_range[0], y_range[1], 1, axes_height))
+                    bottom = round(linear_transform(bottom_value, y_range[0], y_range[1], 1, axes_height))
+                    cmap, norm = container.cmap, container.norm
+                    char = color_to_ascii[std_color(cmap(norm(top_value)))]
+                    bar_height = top - bottom
+                    if i == 1:
+                        bar_height = top
 
-                c = AsciiCanvas(draw_bar(
-                    bar_height,
-                    10,
-                    axes_height,
-                    10,
-                    (0,9),
-                    (1,axes_height),
-                    char
-                ))
+                    c = AsciiCanvas(draw_bar(
+                        bar_height,
+                        10,
+                        axes_height,
+                        10,
+                        (0,9),
+                        (1,axes_height),
+                        char
+                    ))
 
-                canvas = canvas.update(c, (axes_height - top, 0))
+                    canvas = canvas.update(c, (axes_height - top, 0))
 
     canvas = add_line_plots(canvas, ax.get_lines(), axes_height, axes_width, x_range, y_range, color_to_ascii, errorbar_caplines)
 

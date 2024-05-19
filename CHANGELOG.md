@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add support for colour bars on scatter plots.
 - Add support for contour plots without colors.
 - Add support for text objects in plot.
 
