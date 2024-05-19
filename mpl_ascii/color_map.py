@@ -1,10 +1,13 @@
 from typing import Dict
-import matplotlib
 from matplotlib.axes import Axes
-from matplotlib.collections import LineCollection, PathCollection, PolyCollection, QuadMesh
-from matplotlib.container import BarContainer
+from matplotlib.collections import PathCollection, QuadMesh
 from matplotlib.figure import Figure
-from matplotlib.patches import Rectangle
+
+from mpl_ascii.bar import get_bars
+from mpl_ascii.color import Char, std_color
+from mpl_ascii.line import get_lines_plots
+from mpl_ascii.poly import get_violin_plots
+from mpl_ascii.scatter import get_scatter_plots
 
 
 bar_chars = [
@@ -42,17 +45,6 @@ scatter_chars = [
     "n",
 ]
 
-class Char:
-    def __init__(self, character: str, color: str) -> None:
-        self.character=character
-        self.color=color
-
-    def __str__(self) -> str:
-        return self.character
-
-
-    def __rich__(self) -> str:
-        return f"[{self.color}]{self.character}[/{self.color}]"
 
 class FigureColorMap:
     def __init__(self, figure: Figure) -> None:
@@ -110,16 +102,12 @@ def ax_color_map(ax):
 
     gen = ascii_chars(bar_chars)
     color_to_ascii = {}
-    for container in ax.containers:
-        if not isinstance(container, BarContainer):
+    bars = get_bars(ax)
+    for bar in bars:
+        color = std_color(bar.get_facecolor())
+        if color in color_to_ascii:
             continue
-        for bar in container.patches:
-            if not isinstance(bar, Rectangle):
-                continue
-            color = std_color(bar.get_facecolor())
-            if color in color_to_ascii:
-                continue
-            color_to_ascii[color] = Char(next(gen), color)
+        color_to_ascii[color] = Char(next(gen), color)
 
     gen = ascii_chars(bar_chars)
     for container in ax.collections:
@@ -133,35 +121,32 @@ def ax_color_map(ax):
                 continue
             color_to_ascii[color] = Char(next(gen), color)
 
-    lines = ax.get_lines()
     gen = ascii_chars(line_chars)
+    lines = get_lines_plots(ax)
     for line in lines:
         color = std_color(line.get_color())
         if color in color_to_ascii:
             continue
         color_to_ascii[color] = Char(next(gen), color)
 
-    for collection in ax.collections:
-        if isinstance(collection, PolyCollection):
-            for color in collection.get_facecolor():
-                color = std_color(tuple(color.tolist()))
-                if color in color_to_ascii:
-                    continue
-                color_to_ascii[color] = Char(next(gen), color)
+    pcolls, linecolls = get_violin_plots(ax)
+    for collection in pcolls:
+        for color in collection.get_facecolor():
+            color = std_color(tuple(color.tolist()))
+            if color in color_to_ascii:
+                continue
+            color_to_ascii[color] = Char(next(gen), color)
 
-        if isinstance(collection, LineCollection):
-            for color in collection.get_color():
-                color = std_color(tuple(color.tolist()))
-                if color in color_to_ascii:
-                    continue
-                color_to_ascii[color] = Char(next(gen), color)
-
-
+    for collection in linecolls:
+        for color in collection.get_color():
+            color = std_color(tuple(color.tolist()))
+            if color in color_to_ascii:
+                continue
+            color_to_ascii[color] = Char(next(gen), color)
 
     gen = ascii_chars(scatter_chars)
+    collection = get_scatter_plots(ax)
     for collection in ax.collections:
-        if not isinstance(collection, PathCollection):
-            continue
         for color in collection.get_facecolor():
             color = std_color(tuple(color.tolist()))
             if color in color_to_ascii:
@@ -169,6 +154,3 @@ def ax_color_map(ax):
             color_to_ascii[color] = Char(next(gen), color)
 
     return color_to_ascii
-
-def std_color(color):
-    return matplotlib.colors.to_hex(color)

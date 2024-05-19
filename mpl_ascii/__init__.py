@@ -8,7 +8,7 @@ from matplotlib.backends.backend_agg import (
 from matplotlib.figure import Figure
 
 from mpl_ascii.ascii_canvas import AsciiCanvas
-from mpl_ascii.color_map import ax_color_map, FigureColorMap
+from mpl_ascii.color_map import FigureColorMap
 from mpl_ascii.draw import draw_ax
 
 from rich.console import Console
