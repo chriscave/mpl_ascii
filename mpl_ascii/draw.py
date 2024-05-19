@@ -1,4 +1,5 @@
 from itertools import zip_longest
+import matplotlib
 from matplotlib.axes import Axes
 from matplotlib.collections import LineCollection, PathCollection, PolyCollection, QuadMesh
 from matplotlib.colors import Colormap, ListedColormap, Normalize
@@ -16,6 +17,10 @@ from mpl_ascii.tools import linear_transform, scale_factor
 from mpl_ascii import color_map
 
 import mpl_ascii
+
+mpl_version = matplotlib.__version__
+mpl_version = tuple(map(int, mpl_version.split(".")))
+
 
 def draw_ax(ax: Axes, axes_height, axes_width, color_to_ascii):
     frame_buffer_left = 1
@@ -538,12 +543,15 @@ def add_ax_title(canvas, title):
 def add_legend(canvas, legend, color_to_ascii):
 
     # Add legend
-
     if legend:
-        handles, text = legend.legend_handles, legend.texts
+        texts = legend.texts
+        if mpl_version >= (3,7,0):
+            handles = legend.legend_handles
+        else:
+            handles = legend.legendHandles
 
         canvas_legend = AsciiCanvas()
-        for handle, text in zip(handles, text):
+        for handle, text in zip(handles, texts):
             char = " "
             if isinstance(handle, Rectangle):
                 char = color_to_ascii[std_color(handle.get_facecolor())]
