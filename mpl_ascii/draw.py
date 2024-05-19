@@ -540,7 +540,7 @@ def add_legend(canvas, legend, color_to_ascii):
     # Add legend
 
     if legend:
-        handles, text = legend.legendHandles, legend.texts
+        handles, text = legend.legend_handles, legend.texts
 
         canvas_legend = AsciiCanvas()
         for handle, text in zip(handles, text):
