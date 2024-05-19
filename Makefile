@@ -43,6 +43,8 @@ accept: $(addprefix $(ACCEPTANCE_DIR)/,$(ALL_PLOTS_TXT))
 all.png: $(addprefix $(LOCATION)/,$(ALL_PLOTS_PNG))
 	@true
 
+clear:
+	-rm -rf $(DATA_DIR)
 
 %.txt: $(LOCATION)/%.txt
 	@true

@@ -35,7 +35,7 @@ if __name__ == "__main__":
     ax.set_ylabel('Y axis')
     ax.set_title('Scatter Plot with Color Bar')
 
-    # if out:
-    #     fig.savefig(out)
+    if out:
+        fig.savefig(out)
 
     plt.show()
