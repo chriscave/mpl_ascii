@@ -1,3 +1,5 @@
+from itertools import zip_longest
+from matplotlib.axes import Axes
 from matplotlib.collections import LineCollection, PathCollection, PolyCollection, QuadMesh
 from matplotlib.colors import Colormap, ListedColormap, Normalize
 from matplotlib.container import BarContainer, ErrorbarContainer
@@ -8,12 +10,14 @@ from matplotlib.text import Annotation, Text
 import numpy as np
 
 from mpl_ascii.ascii_canvas import AsciiCanvas
-from mpl_ascii.color_map import Char, ax_color_map, std_color
+from mpl_ascii.color_map import Char, std_color
 from mpl_ascii.tools import linear_transform, scale_factor
+
+from mpl_ascii import color_map
 
 import mpl_ascii
 
-def draw_ax(ax, axes_height, axes_width):
+def draw_ax(ax: Axes, axes_height, axes_width, color_to_ascii):
     frame_buffer_left = 1
     frame_buffer_right = 1
     frame_buffer_top = 1
@@ -22,8 +26,6 @@ def draw_ax(ax, axes_height, axes_width):
 
     frame_width = axes_width + frame_buffer_left + frame_buffer_right
     frame_height = axes_height + frame_buffer_top + frame_buffer_bottom
-
-    color_to_ascii = ax_color_map(ax)
 
     x_range = ax.get_xlim()
     if x_range[1] < x_range[0]:
@@ -39,6 +41,40 @@ def draw_ax(ax, axes_height, axes_width):
 
     canvas = add_bar_chart(canvas, ax.containers, axes_height, axes_width, x_range, y_range, color_to_ascii)
 
+    for container in ax.collections:
+        if isinstance(container, QuadMesh):
+            color_bar_width = 10
+            axes_width = color_bar_width
+            frame_width = axes_width + frame_buffer_left + frame_buffer_right
+
+
+            bar_chars = color_map.bar_chars
+            tick_data = [tick.get_loc() for tick in ax.yaxis.get_major_ticks()]
+            for char, i in zip(bar_chars, range(1, len(tick_data))):
+                top_value = tick_data[i]
+                bottom_value = tick_data[i-1]
+                if tick_data[i] > y_range[1]:
+                    top_value = y_range[1]
+                top = round(linear_transform(top_value, y_range[0], y_range[1], 1, axes_height))
+                bottom = round(linear_transform(bottom_value, y_range[0], y_range[1], 1, axes_height))
+                cmap, norm = container.cmap, container.norm
+                char = color_to_ascii[std_color(cmap(norm(top_value)))]
+                bar_height = top - bottom
+                if i == 1:
+                    bar_height = top
+
+                c = AsciiCanvas(draw_bar(
+                    bar_height,
+                    10,
+                    axes_height,
+                    10,
+                    (0,9),
+                    (1,axes_height),
+                    char
+                ))
+
+                canvas = canvas.update(c, (axes_height - top, 0))
+
     canvas = add_line_plots(canvas, ax.get_lines(), axes_height, axes_width, x_range, y_range, color_to_ascii, errorbar_caplines)
 
     canvas = add_errorbars(canvas, axes_height, axes_width, error_barlinescols, x_range, y_range)
@@ -53,6 +89,7 @@ def draw_ax(ax, axes_height, axes_width):
     canvas = add_violin_plots(canvas, ax.collections, axes_height, axes_width, x_range, y_range, color_to_ascii, error_barlinescols)
 
     canvas = add_scatter_plots(canvas, ax.collections, axes_height, axes_width, x_range, y_range, color_to_ascii)
+
 
     if mpl_ascii.UNRELEASED:
         canvas = add_text(canvas, ax.texts, axes_height, axes_width, x_range, y_range)
@@ -427,14 +464,16 @@ def add_scatter_plots(canvas, collections, axes_height, axes_width, x_range, y_r
         # Add scatter plot
         if isinstance(collection, PathCollection):
             offsets = collection.get_offsets()
-
             if len(collection.get_facecolor()) > 0:
-                color = collection.get_facecolor()[0]
+                default_color = collection.get_facecolor()[0]
+                colors = collection.get_facecolor()
 
             if len(collection.get_edgecolor()) > 0:
-                color = collection.get_edgecolor()[0]
+                default_color = collection.get_edgecolor()[0]
+                colors = collection.get_edgecolor()
 
-            for point in offsets:
+
+            for point,color in zip_longest(offsets, colors, fillvalue=default_color):
                 color = tuple(color)
 
                 x_new = round(linear_transform(point[0], x_min, x_max, 0, axes_width-1))
