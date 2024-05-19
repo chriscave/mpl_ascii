@@ -10,6 +10,7 @@ import numpy as np
 from mpl_ascii.ascii_canvas import AsciiCanvas
 from mpl_ascii.bar import add_bar_chart, draw_bar
 from mpl_ascii.color import std_color
+from mpl_ascii.colorbar import add_colorbar, get_colorbar
 from mpl_ascii.line import add_errorbars, add_line_markers, get_lines_with_markers
 from mpl_ascii.line import add_line_plots, draw_line
 from mpl_ascii.poly import add_violin_plots
@@ -44,47 +45,18 @@ def draw_ax(ax: Axes, axes_height, axes_width, color_to_ascii):
 
     canvas = AsciiCanvas(np.full((axes_height, axes_width), fill_value=" "))
 
-    canvas = add_bar_chart(canvas, ax, axes_height, axes_width, x_range, y_range, color_to_ascii)
+    canvas = add_bar_chart(canvas, ax, x_range, y_range, color_to_ascii)
 
     if mpl_ascii.UNRELEASED:
+        if get_colorbar(ax):
+            color_bar_width = 10
+            axes_width = color_bar_width
+            frame_width = axes_width + 2
+            canvas = add_colorbar(ax, canvas, axes_height, axes_width, y_range, color_to_ascii)
 
-        for container in ax.collections:
-            if isinstance(container, QuadMesh):
-                color_bar_width = 10
-                axes_width = color_bar_width
-                frame_width = axes_width + frame_buffer_left + frame_buffer_right
+    canvas = add_line_plots(canvas, ax, x_range, y_range, color_to_ascii)
 
-
-                bar_chars = color_map.bar_chars
-                tick_data = [tick.get_loc() for tick in ax.yaxis.get_major_ticks()]
-                for char, i in zip(bar_chars, range(1, len(tick_data))):
-                    top_value = tick_data[i]
-                    bottom_value = tick_data[i-1]
-                    if tick_data[i] > y_range[1]:
-                        top_value = y_range[1]
-                    top = round(linear_transform(top_value, y_range[0], y_range[1], 1, axes_height))
-                    bottom = round(linear_transform(bottom_value, y_range[0], y_range[1], 1, axes_height))
-                    cmap, norm = container.cmap, container.norm
-                    char = color_to_ascii[std_color(cmap(norm(top_value)))]
-                    bar_height = top - bottom
-                    if i == 1:
-                        bar_height = top
-
-                    c = AsciiCanvas(draw_bar(
-                        bar_height,
-                        10,
-                        axes_height,
-                        10,
-                        (0,9),
-                        (1,axes_height),
-                        char
-                    ))
-
-                    canvas = canvas.update(c, (axes_height - top, 0))
-
-    canvas = add_line_plots(canvas, ax, axes_height, axes_width, x_range, y_range, color_to_ascii)
-
-    canvas = add_errorbars(canvas, ax, axes_height, axes_width, x_range, y_range)
+    canvas = add_errorbars(canvas, ax, x_range, y_range)
 
     lines_with_markers = get_lines_with_markers(ax)
 

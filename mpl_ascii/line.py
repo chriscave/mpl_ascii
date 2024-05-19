@@ -18,7 +18,8 @@ def get_lines_plots(ax: Axes):
 
 
 
-def add_line_plots(canvas, ax, axes_height, axes_width, x_range, y_range, color_to_ascii):
+def add_line_plots(canvas, ax, x_range, y_range, color_to_ascii):
+    axes_height, axes_width = canvas.shape
     for line in get_lines_plots(ax):
 
         char = color_to_ascii[std_color(line.get_color())]
@@ -140,7 +141,8 @@ def get_errorbars(ax):
 
     return errorbar_caplines, error_barlinescols
 
-def add_errorbars(canvas, ax, axes_height, axes_width, x_range, y_range):
+def add_errorbars(canvas, ax, x_range, y_range):
+    axes_height, axes_width = canvas.shape
     _, error_barlinescols = get_errorbars(ax)
     for collection in error_barlinescols:
         for xy in collection.get_segments():

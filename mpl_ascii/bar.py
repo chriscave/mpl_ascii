@@ -30,7 +30,8 @@ def draw_bar(bar_height, bar_width, ax_height, ax_width, x_range, y_range, char)
 
     return np.full((ascii_height_bar, ascii_width_bar), fill_value=char)
 
-def add_bar_chart(canvas, ax, axes_height, axes_width, x_range, y_range, color_to_ascii):
+def add_bar_chart(canvas, ax, x_range, y_range, color_to_ascii):
+    axes_height, axes_width = canvas.shape
     x_min, x_max = x_range
     y_min, y_max = y_range
 
