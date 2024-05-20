@@ -15,6 +15,17 @@ class BarPlots:
     def update(self, canvas: AsciiCanvas, color_to_ascii) -> AsciiCanvas:
         return add_bar_chart(canvas, self.ax, color_to_ascii)
 
+    @property
+    def colors(self):
+        colors = []
+        bars = get_bars(self.ax)
+        for bar in bars:
+            color = std_color(bar.get_facecolor())
+            colors.append(color)
+        return colors
+
+
+
 def get_bars(ax):
     bars = []
     for container in ax.containers:

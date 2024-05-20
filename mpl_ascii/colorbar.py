@@ -10,6 +10,7 @@ from mpl_ascii.tools import linear_transform, get_yrange
 class ColorbarPlot:
     def __init__(self, ax) -> None:
         self.ax = ax
+        self.colorbar = get_colorbar(ax)
 
     def update(self, canvas: AsciiCanvas, color_to_ascii) -> AsciiCanvas:
         return add_colorbar(self.ax, canvas, color_to_ascii)

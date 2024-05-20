@@ -1,8 +1,11 @@
 from matplotlib.axes import Axes
+from matplotlib.collections import PathCollection, QuadMesh
 import numpy as np
 
 from mpl_ascii.ascii_canvas import AsciiCanvas
 from mpl_ascii.bar import BarPlots, get_bars
+from mpl_ascii.color import std_color
+from mpl_ascii.color_map import ax_color_map
 from mpl_ascii.colorbar import ColorbarPlot, get_colorbar
 from mpl_ascii.format import add_ax_title, add_ticks_and_frame
 from mpl_ascii.legend import add_legend
@@ -12,13 +15,53 @@ from mpl_ascii.scatter import ScatterPlot, get_scatter_plots
 
 
 class AxesPlot:
-    def __init__(self, ax, axes_height, axes_width, color_to_ascii, colorbar=None) -> None:
+    def __init__(self, ax, axes_height, axes_width, colorbar=None) -> None:
         self.ax = ax
         self.plots = get_plots(ax)
         self._axes_height = axes_height
         self._axes_width = axes_width
-        self.color_to_ascii = color_to_ascii
+        # self.color_to_ascii = color_to_ascii
         self._colorbar = colorbar
+
+
+    def color_to_ascii(self):
+        # if not self.colorbar:
+        #     color_to_ascii = {}
+        #     colors = []
+        #     for plot in self.plots:
+        #         colors.append(plot.colors)
+
+        if not self.colorbar:
+            return ax_color_map(self.ax)
+
+        if self.colorbar:
+            colorbar = self.colorbar.ax
+            color_bar_map = ax_color_map(colorbar)
+
+            for collection in colorbar.collections:
+                if isinstance(collection, QuadMesh):
+                    cmap, norm = collection.cmap, collection.norm
+
+
+
+            tick_data = [tick.get_loc() for tick in colorbar.yaxis.get_major_ticks()]
+
+            color_to_ascii = {}
+            for collection in self.ax.collections:
+                if isinstance(collection, PathCollection):
+                    for val, color in zip(collection.get_array(), collection.get_facecolor()):
+                        min_greater = min([tick for tick in tick_data if tick >= val])
+                        color = std_color(color)
+                        char = color_bar_map[std_color(cmap(norm(min_greater)))]
+                        if color in color_to_ascii:
+                            continue
+                        color_to_ascii[color] = char
+
+        return color_to_ascii
+
+
+
+
 
     def is_colorbar(self):
         if type(self.plots[0]) == ColorbarPlot:
@@ -45,7 +88,7 @@ class AxesPlot:
 
     @property
     def canvas(self):
-        return draw_ax(self.ax, self.plots, self.axes_height, self.axes_width, self.color_to_ascii)
+        return draw_ax(self.ax, self.plots, self.axes_height, self.axes_width, self.color_to_ascii( ))
 
 
 def draw_ax(ax: Axes, all_plots, axes_height, axes_width, color_to_ascii):

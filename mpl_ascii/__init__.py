@@ -59,8 +59,8 @@ class FigureCanvasAscii(FigureCanvasAgg):
         axes_plots = []
 
         for ax in figure.axes:
-            color_map = self.fig_color_map(ax)
-            axes_plot = AxesPlot(ax, axes_height, axes_width, color_map)
+            # color_map = self.fig_color_map(ax)
+            axes_plot = AxesPlot(ax, axes_height, axes_width)
             axes_plots.append(axes_plot)
 
         colorbars =[ax.is_colorbar() for ax in axes_plots]
