@@ -1,6 +1,5 @@
 import matplotlib
 from matplotlib.axes import Axes
-from matplotlib.colorbar import Colorbar
 from matplotlib.contour import QuadContourSet
 from matplotlib.text import Annotation, Text
 import numpy as np
@@ -21,9 +20,7 @@ mpl_version = matplotlib.__version__
 mpl_version = tuple(map(int, mpl_version.split(".")))
 
 
-def draw_ax(ax: Axes, axes_height, axes_width, color_to_ascii):
-
-    all_plots = get_plots(ax)
+def draw_ax(ax: Axes, all_plots, axes_height, axes_width, color_to_ascii):
 
     canvas = init_canvas(all_plots, axes_height, axes_width)
 
@@ -66,41 +63,41 @@ def get_plots(ax):
     return all_plots
 
 def has_colorbar(ax):
-    if get_colorbar(ax) is None:
-        return False
-    return True
+    if get_colorbar(ax):
+        return True
+    return False
 
 def has_bar_plots(ax):
-    if len(get_bars(ax)) == 0:
-        return False
-    return True
+    if len(get_bars(ax)) > 0:
+        return True
+    return False
 
 def has_line_plots(ax):
-    if len(get_lines_plots(ax)) == 0:
-        return False
-    return True
+    if len(get_lines_plots(ax)) > 0:
+        return True
+    return False
 
 def has_errorbars(ax):
     errorbar_caplines, error_barlinescols = get_errorbars(ax)
-    if len(errorbar_caplines) == 0 and len(error_barlinescols) == 0:
-        return False
-    return True
+    if len(errorbar_caplines) > 0 or len(error_barlinescols) > 0:
+        return True
+    return False
 
 def has_scatter_plots(ax):
-    if len(get_scatter_plots(ax)) == 0:
-        return False
-    return True
+    if len(get_scatter_plots(ax)) > 0:
+        return True
+    return False
 
 def has_line_markers(ax):
-    if len(get_lines_with_markers(ax)) == 0:
-        return False
-    return True
+    if len(get_lines_with_markers(ax)) > 0:
+        return True
+    return False
 
 def has_violin_plots(ax):
     pcoll, linecolls = get_violin_plots(ax)
-    if len(pcoll) == 0 and len(linecolls) == 0:
-        return False
-    return True
+    if len(pcoll) > 0 and len(linecolls) > 0:
+        return True
+    return False
 
 
 def add_contours(canvas, collections, axes_height, axes_width, x_range, y_range, color_to_ascii):

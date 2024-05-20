@@ -1,3 +1,10 @@
+# class AxesPlot:
+#     def __init__(self, ax, colorbar=None) -> None:
+#         self.ax = ax
+
+#     def draw(self, all_plots, axes_height, axes_width, color_to_ascii):
+#         return draw_ax(self.ax, all_plots, axes_height, axes_width, color_to_ascii)
+
 def get_xrange(ax):
     x_range = ax.get_xlim()
     if x_range[1] < x_range[0]:
