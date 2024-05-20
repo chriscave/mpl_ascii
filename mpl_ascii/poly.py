@@ -1,9 +1,9 @@
 from matplotlib.collections import LineCollection, PolyCollection
 
 from mpl_ascii.ascii_canvas import AsciiCanvas
-from mpl_ascii.ax import get_xrange, get_yrange
 from mpl_ascii.color import std_color
 from mpl_ascii.line import draw_line, get_errorbars
+from mpl_ascii.tools import get_xrange, get_yrange
 
 
 class ViolinPlots:

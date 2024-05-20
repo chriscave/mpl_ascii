@@ -8,6 +8,7 @@ from matplotlib.backends.backend_agg import (
 from matplotlib.figure import Figure
 
 from mpl_ascii.ascii_canvas import AsciiCanvas
+from mpl_ascii.ax import AxesPlot
 from mpl_ascii.color_map import FigureColorMap
 from mpl_ascii.draw import draw_ax, get_plots
 
@@ -31,7 +32,17 @@ def show():
             fig = canvas.to_txt()
             print(fig)
 
+def draw_figure(axes_plots):
+    image_canvas = AsciiCanvas()
+    for ax in axes_plots:
+        if ax.is_colorbar():
+            continue
+        image_canvas = image_canvas.update(ax.canvas, (image_canvas.shape[0], 0))
+        if ax.colorbar:
+            color_bar = ax.colorbar
+            image_canvas = image_canvas.update(color_bar.canvas, (0, image_canvas.shape[1]))
 
+    return image_canvas
 
 class FigureCanvasAscii(FigureCanvasAgg):
 
@@ -39,27 +50,35 @@ class FigureCanvasAscii(FigureCanvasAgg):
         super().__init__(figure)
         self.fig_color_map = FigureColorMap(figure)
 
-    def draw_all_axes(self):
+
+    def get_all_axes_plots(self):
         figure = self.figure
         axes_height = AXES_HEIGHT
         axes_width = AXES_WIDTH
 
-        ascii_canvases = []
-        all_ax_plots = []
+        axes_plots = []
+
         for ax in figure.axes:
-            all_ax_plots.append(get_plots(ax))
-
-        for ax, all_plots in zip(figure.axes, all_ax_plots):
             color_map = self.fig_color_map(ax)
-            canvas = draw_ax(ax, all_plots, axes_height, axes_width, color_map)
-            ascii_canvases.append(canvas)
+            axes_plot = AxesPlot(ax, axes_height, axes_width, color_map)
+            axes_plots.append(axes_plot)
 
-        return ascii_canvases
+        colorbars =[ax.is_colorbar() for ax in axes_plots]
+        if True in colorbars:
+            idx = colorbars.index(True)
+            ax_with_color_bar = axes_plots[idx - 1]
+            ax_with_color_bar.colorbar = axes_plots[idx]
+
+        self.axes_plots = axes_plots
+
+        return axes_plots
+
 
     def to_txt_with_color(self, sep="\n", tw=240, invert=False, threshold=200):
         self.draw()
 
-        ascii_canvases = self.draw_all_axes()
+        axes_plots = self.get_all_axes_plots()
+        ascii_canvases = [ax_plot.canvas for ax_plot in axes_plots]
 
         color_ascii_canvases = []
         for canvas, ax in zip(ascii_canvases, self.figure.axes):
@@ -70,16 +89,7 @@ class FigureCanvasAscii(FigureCanvasAgg):
             canvas.array = arr
             color_ascii_canvases.append(canvas)
 
-        image_canvas = AsciiCanvas()
-        for canvas in color_ascii_canvases:
-            image_canvas = image_canvas.update(canvas, (image_canvas.shape[0], 0))
-
-        # for ax in list_of_axes:
-        #     if ax.is_colorbar:
-        #         continue
-        #     image_canvas = image_canvas.update(ax.canvas, (image_canvas.shape[0], 0))
-        #     if ax.has_associated_cb:
-        #         image_canvas = image_canvas.update(ax.canvas, (0, image_canvas.shape[1]))
+        image_canvas = draw_figure(axes_plots)
 
         return image_canvas
 
@@ -87,12 +97,9 @@ class FigureCanvasAscii(FigureCanvasAgg):
     def to_txt(self, sep="\n", tw=240, invert=False, threshold=200):
         self.draw()
 
-        ascii_canvases = self.draw_all_axes()
+        axes_plots = self.get_all_axes_plots()
 
-        image_canvas = AsciiCanvas()
-        for canvas in ascii_canvases:
-            image_canvas = image_canvas.update(canvas, (image_canvas.shape[0], 0))
-
+        image_canvas = draw_figure(axes_plots)
         return image_canvas
 
 
@@ -102,6 +109,7 @@ class FigureCanvasAscii(FigureCanvasAgg):
                 f.write(str(self.to_txt()))
         else:
             filename.write(str(self.to_txt()).encode())
+
 
 
 FigureCanvas = FigureCanvasAscii

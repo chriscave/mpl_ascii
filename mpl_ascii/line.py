@@ -2,10 +2,9 @@ from matplotlib.axes import Axes
 from matplotlib.container import ErrorbarContainer
 import numpy as np
 from mpl_ascii.ascii_canvas import AsciiCanvas
-from mpl_ascii.ax import get_xrange, get_yrange
 from mpl_ascii.color import std_color
 from mpl_ascii.color import Char
-from mpl_ascii.tools import linear_transform
+from mpl_ascii.tools import linear_transform, get_xrange, get_yrange
 
 
 class LinePlots:

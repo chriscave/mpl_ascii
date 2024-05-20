@@ -6,8 +6,7 @@ import numpy as np
 from mpl_ascii.ascii_canvas import AsciiCanvas
 
 from mpl_ascii.color import std_color
-from mpl_ascii.ax import get_xrange, get_yrange
-from mpl_ascii.tools import linear_transform, scale_factor
+from mpl_ascii.tools import linear_transform, scale_factor, get_xrange, get_yrange
 
 class BarPlots:
     def __init__(self, ax: Axes) -> None:
