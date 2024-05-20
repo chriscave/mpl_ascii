@@ -2,9 +2,30 @@ from matplotlib.axes import Axes
 from matplotlib.container import ErrorbarContainer
 import numpy as np
 from mpl_ascii.ascii_canvas import AsciiCanvas
+from mpl_ascii.ax import get_xrange, get_yrange
 from mpl_ascii.color import std_color
 from mpl_ascii.color import Char
 from mpl_ascii.tools import linear_transform
+
+
+class LinePlots:
+    def __init__(self, ax) -> None:
+        self.ax = ax
+    def update(self, canvas, color_to_ascii):
+        return add_line_plots(canvas, self.ax, color_to_ascii)
+
+class Errorbars:
+    def __init__(self, ax) -> None:
+        self.ax = ax
+    def update(self, canvas, color_to_ascii):
+        return add_errorbars(canvas, self.ax)
+
+class LineMarkers:
+    def __init__(self, ax) -> None:
+        self.ax = ax
+
+    def update(self, canvas, color_to_ascii):
+        return add_line_markers(canvas, self.ax, color_to_ascii)
 
 
 def get_lines_plots(ax: Axes):
@@ -18,7 +39,8 @@ def get_lines_plots(ax: Axes):
 
 
 
-def add_line_plots(canvas, ax, x_range, y_range, color_to_ascii):
+def add_line_plots(canvas, ax, color_to_ascii):
+    x_range, y_range = get_xrange(ax), get_yrange(ax)
     axes_height, axes_width = canvas.shape
     for line in get_lines_plots(ax):
 
@@ -141,7 +163,8 @@ def get_errorbars(ax):
 
     return errorbar_caplines, error_barlinescols
 
-def add_errorbars(canvas, ax, x_range, y_range):
+def add_errorbars(canvas, ax):
+    x_range, y_range = get_xrange(ax), get_yrange(ax)
     axes_height, axes_width = canvas.shape
     _, error_barlinescols = get_errorbars(ax)
     for collection in error_barlinescols:
@@ -193,7 +216,10 @@ def get_lines_with_markers(ax):
 
     return lines_with_markers
 
-def add_line_markers(canvas, axes_height, axes_width, x_range, y_range, color_to_ascii, lines_with_markers):
+def add_line_markers(canvas, ax, color_to_ascii):
+    x_range, y_range = get_xrange(ax), get_yrange(ax)
+    axes_height, axes_width = canvas.shape
+    lines_with_markers = get_lines_with_markers(ax)
     for line in lines_with_markers:
         marker = get_ascii_marker(line.get_marker())
 

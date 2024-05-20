@@ -2,9 +2,18 @@ from matplotlib.collections import QuadMesh
 
 from mpl_ascii import color_map
 from mpl_ascii.ascii_canvas import AsciiCanvas
+from mpl_ascii.ax import get_yrange
 from mpl_ascii.bar import draw_bar
 from mpl_ascii.color import std_color
 from mpl_ascii.tools import linear_transform
+
+
+class ColorbarPlot:
+    def __init__(self, ax) -> None:
+        self.ax = ax
+
+    def update(self, canvas: AsciiCanvas, color_to_ascii) -> AsciiCanvas:
+        return add_colorbar(self.ax, canvas, color_to_ascii)
 
 
 def get_colorbar(ax):
@@ -15,8 +24,10 @@ def get_colorbar(ax):
 
     return colorbar
 
-def add_colorbar(ax, canvas, axes_height, axes_width, y_range, color_to_ascii):
+def add_colorbar(ax, canvas, color_to_ascii):
     colorbar = get_colorbar(ax)
+    axes_height, axes_width = canvas.shape
+    y_range = get_yrange(ax)
 
     color_bar_width = axes_width
 

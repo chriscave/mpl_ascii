@@ -3,8 +3,16 @@ from matplotlib.collections import PathCollection
 import numpy as np
 
 from mpl_ascii.ascii_canvas import AsciiCanvas
+from mpl_ascii.ax import get_xrange, get_yrange
 from mpl_ascii.color import Char, std_color
 from mpl_ascii.tools import linear_transform
+
+
+class ScatterPlot:
+    def __init__(self, ax) -> None:
+        self.ax = ax
+    def update(self, canvas, color_to_ascii):
+        return add_scatter_plots(canvas, self.ax, color_to_ascii)
 
 
 def get_scatter_plots(ax):
@@ -16,7 +24,9 @@ def get_scatter_plots(ax):
     return scatter_plots
 
 
-def add_scatter_plots(canvas, ax, axes_height, axes_width, x_range, y_range, color_to_ascii):
+def add_scatter_plots(canvas, ax, color_to_ascii):
+    x_range, y_range = get_xrange(ax), get_yrange(ax)
+    axes_height, axes_width = canvas.shape
     x_min, x_max = x_range
     y_min, y_max = y_range
 

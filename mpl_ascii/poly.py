@@ -1,9 +1,16 @@
 from matplotlib.collections import LineCollection, PolyCollection
 
 from mpl_ascii.ascii_canvas import AsciiCanvas
+from mpl_ascii.ax import get_xrange, get_yrange
 from mpl_ascii.color import std_color
 from mpl_ascii.line import draw_line, get_errorbars
 
+
+class ViolinPlots:
+    def __init__(self, ax) -> None:
+        self.ax = ax
+    def update(self, canvas, color_to_ascii):
+        return add_violin_plots(canvas, self.ax, color_to_ascii)
 
 def get_violin_plots(ax):
     poly_collection = []
@@ -23,8 +30,10 @@ def get_violin_plots(ax):
 
     return poly_collection, line_collection
 
-def add_violin_plots(canvas, ax, axes_height, axes_width, x_range, y_range, color_to_ascii):
+def add_violin_plots(canvas, ax, color_to_ascii):
+    x_range, y_range = get_xrange(ax), get_yrange(ax)
     pcolls, linecolls = get_violin_plots(ax)
+    axes_height, axes_width = canvas.shape
     for collection in pcolls:
         char = color_to_ascii[std_color(collection.get_facecolor())]
         for path in collection.get_paths():
