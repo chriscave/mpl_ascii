@@ -13,9 +13,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add support for contour plots without colors.
 - Add support for text objects in plot.
 
+## [0.6.3] 2024-05-24
+
+### Fixed
+
+- Line plots now handle None values as matplotlib does. If a `None` value is passed into a line plot then it has line break.
+
 ## [0.6.2] 2024-05-19
 
-## Fixed
+### Fixed
 
 - `mpl_ascii` is now compatible with matplotlib 3.9.
 
