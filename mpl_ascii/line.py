@@ -78,16 +78,26 @@ def draw_line(height, width, x_data, y_data, x_range, y_range, char, linestyle="
         plot_y.append(y)
 
 
-    ascii_x_data = [
-        round(linear_transform(x, x_min, x_max, 0, width-1)) for x in plot_x if (x <= x_max and x >= x_min)
-    ]
-    ascii_y_data = [
-        round(linear_transform(y, y_min, y_max, 1, height)) for y in plot_y if (y <= y_max and y >= y_min)
-    ]
+    ascii_x_data = []
+    for x in plot_x:
+        if np.isnan(x):
+            ascii_x_data.append(None)
+            continue
+        ascii_x_data.append(round(linear_transform(x, x_min, x_max, 0, width-1)))
+
+    ascii_y_data = []
+    for y in plot_y:
+        if np.isnan(y):
+            ascii_y_data.append(None)
+            continue
+        ascii_y_data.append(round(linear_transform(y, y_min, y_max, 1, height)))
+
 
     line_canvas_arr = np.full((height, width), fill_value=" ", dtype="object")
 
     for x, y in zip(ascii_x_data, ascii_y_data):
+        if x is None and y is None:
+            continue
         row = height - y
         col = x
         line_canvas_arr[row, col] = char
@@ -99,6 +109,10 @@ def draw_line(height, width, x_data, y_data, x_range, y_range, char, linestyle="
     end_points = zip(ascii_x_data[1:], ascii_y_data[1:])
     join_line_points = []
     for start, end in zip(start_points, end_points):
+        if start[0] is None and start[1] is None:
+            continue
+        if end[0] is None and end[1] is None:
+            continue
         line_points = bresenham_line(start[0], start[1], end[0], end[1])
         if len(line_points) > 2:
             join_line_points += line_points[1:-1]
