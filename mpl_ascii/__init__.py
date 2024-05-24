@@ -35,12 +35,14 @@ def show():
 def draw_figure(axes_plots):
     image_canvas = AsciiCanvas()
     for ax in axes_plots:
-        if ax.is_colorbar():
-            continue
+        if UNRELEASED:
+            if ax.is_colorbar():
+                continue
         image_canvas = image_canvas.update(ax.canvas, (image_canvas.shape[0], 0))
-        if ax.colorbar:
-            color_bar = ax.colorbar
-            image_canvas = image_canvas.update(color_bar.canvas, (0, image_canvas.shape[1]))
+        if UNRELEASED:
+            if ax.colorbar:
+                color_bar = ax.colorbar
+                image_canvas = image_canvas.update(color_bar.canvas, (0, image_canvas.shape[1]))
 
     return image_canvas
 
@@ -63,11 +65,12 @@ class FigureCanvasAscii(FigureCanvasAgg):
             axes_plot = AxesPlot(ax, axes_height, axes_width)
             axes_plots.append(axes_plot)
 
-        colorbars =[ax.is_colorbar() for ax in axes_plots]
-        if True in colorbars:
-            idx = colorbars.index(True)
-            ax_with_color_bar = axes_plots[idx - 1]
-            ax_with_color_bar.colorbar = axes_plots[idx]
+        if UNRELEASED:
+            colorbars =[ax.is_colorbar() for ax in axes_plots]
+            if True in colorbars:
+                idx = colorbars.index(True)
+                ax_with_color_bar = axes_plots[idx - 1]
+                ax_with_color_bar.colorbar = axes_plots[idx]
 
         self.axes_plots = axes_plots
 
