@@ -96,7 +96,7 @@ def draw_line(height, width, x_data, y_data, x_range, y_range, char, linestyle="
     line_canvas_arr = np.full((height, width), fill_value=" ", dtype="object")
 
     for x, y in zip(ascii_x_data, ascii_y_data):
-        if x is None and y is None:
+        if x is None or y is None:
             continue
         row = height - y
         col = x
@@ -109,9 +109,9 @@ def draw_line(height, width, x_data, y_data, x_range, y_range, char, linestyle="
     end_points = zip(ascii_x_data[1:], ascii_y_data[1:])
     join_line_points = []
     for start, end in zip(start_points, end_points):
-        if start[0] is None and start[1] is None:
+        if start[0] is None or start[1] is None:
             continue
-        if end[0] is None and end[1] is None:
+        if end[0] is None or end[1] is None:
             continue
         line_points = bresenham_line(start[0], start[1], end[0], end[1])
         if len(line_points) > 2:
