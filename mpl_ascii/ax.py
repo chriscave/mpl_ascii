@@ -21,17 +21,10 @@ class AxesPlot:
         self.plots = get_plots(ax)
         self._axes_height = axes_height
         self._axes_width = axes_width
-        # self.color_to_ascii = color_to_ascii
         self._colorbar = colorbar
 
 
     def color_to_ascii(self):
-        # if not self.colorbar:
-        #     color_to_ascii = {}
-        #     colors = []
-        #     for plot in self.plots:
-        #         colors.append(plot.colors)
-
         if not self.colorbar:
             return ax_color_map(self.ax)
 

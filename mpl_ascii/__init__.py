@@ -10,7 +10,6 @@ from matplotlib.figure import Figure
 from mpl_ascii.ascii_canvas import AsciiCanvas
 from mpl_ascii.ax import AxesPlot
 from mpl_ascii.color_map import FigureColorMap
-from mpl_ascii.draw import draw_ax, get_plots
 
 from rich.console import Console
 
