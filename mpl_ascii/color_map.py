@@ -1,14 +1,14 @@
-from typing import Dict
-from matplotlib.axes import Axes
+from typing import Any, Dict, List
 from matplotlib.collections import PathCollection, QuadMesh
 from matplotlib.figure import Figure
 
+from mpl_ascii.ax import AxesPlot, get_plots, has_colorbar
 from mpl_ascii.bar import get_bars
 from mpl_ascii.color import Char, std_color
+from mpl_ascii.colorbar import get_colorbar
 from mpl_ascii.line import get_lines_plots
 from mpl_ascii.poly import get_violin_plots
-from mpl_ascii.scatter import get_scatter_plots
-
+from mpl_ascii.scatter import ScatterPlot, get_scatter_plots
 
 bar_chars = [
     "#",
@@ -46,51 +46,49 @@ scatter_chars = [
 ]
 
 
-class FigureColorMap:
-    def __init__(self, figure: Figure) -> None:
-        self.figure = figure
 
-    def associate_color_bar(self, ax):
-        ax_idx = self.figure.axes.index(ax)
-        if ax_idx == len(self.figure.axes) - 1:
+class FigureColorMap:
+    def __init__(self, all_axes_plots: List[AxesPlot]) -> None:
+        self.all_axes_plots = all_axes_plots
+
+    def associate_color_bar(self, axes_plot: AxesPlot):
+
+        index = self.all_axes_plots.index(axes_plot)
+        if index == len(self.all_axes_plots) - 1:
             return None
 
-        color_bar = self.figure.axes[ax_idx+1]
-        for container in color_bar.collections:
-            if isinstance(container, QuadMesh):
-                return color_bar
+        colorbar_ax = self.all_axes_plots[index + 1]
+        if colorbar_ax.is_colorbar():
+            return colorbar_ax.plots[0]
 
         return None
 
-    def __call__(self, ax: Axes) -> Dict:
-        colorbar = self.associate_color_bar(ax)
-        if colorbar is None:
-            return ax_color_map(ax)
+    def __call__(self, axes_plot: AxesPlot) -> Any:
 
-        color_bar_map = ax_color_map(colorbar)
+        cbplot = self.associate_color_bar(axes_plot)
 
-        for collection in colorbar.collections:
-            if isinstance(collection, QuadMesh):
-                cmap, norm = collection.cmap, collection.norm
-
-
-
-        tick_data = [tick.get_loc() for tick in colorbar.yaxis.get_major_ticks()]
+        if not cbplot:
+            return ax_color_map(axes_plot.ax)
 
         color_to_ascii = {}
-        for collection in ax.collections:
-            if isinstance(collection, PathCollection):
-                for val, color in zip(collection.get_array(), collection.get_facecolor()):
-                    min_greater = min([tick for tick in tick_data if tick >= val])
-                    color = std_color(color)
-                    char = color_bar_map[std_color(cmap(norm(min_greater)))]
-                    if color in color_to_ascii:
-                        continue
-                    color_to_ascii[color] = char
+        color_bar_map = ax_color_map(cbplot.ax)
+        tick_data = cbplot.tick_data
+        cmap, norm = cbplot.cmap, cbplot.norm
+        for plot in axes_plot.plots:
+            if type(plot) == ScatterPlot:
+                scatter_plot = plot
+                for values, colors in zip(scatter_plot.values, scatter_plot.colors):
 
-        return color_to_ascii
+                    for val, color in zip(values, colors):
+                        min_greater = min([tick for tick in tick_data if tick >= val])
+                        color = std_color(color)
+                        char = color_bar_map[std_color(cmap(norm(min_greater)))]
+                        if color in color_to_ascii:
+                            continue
+                        color_to_ascii[color] = char
+                return color_to_ascii
 
-
+        return ax_color_map(axes_plot.ax)
 
 def ax_color_map(ax):
 

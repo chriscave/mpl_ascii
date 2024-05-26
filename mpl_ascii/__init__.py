@@ -8,7 +8,7 @@ from matplotlib.backends.backend_agg import (
 from matplotlib.figure import Figure
 
 from mpl_ascii.ascii_canvas import AsciiCanvas
-from mpl_ascii.ax import AxesPlot
+from mpl_ascii.ax import AxesPlot, draw_ax, get_plots
 from mpl_ascii.color_map import FigureColorMap
 
 from rich.console import Console
@@ -31,79 +31,57 @@ def show():
             fig = canvas.to_txt()
             print(fig)
 
-def draw_figure(axes_plots):
-    image_canvas = AsciiCanvas()
-    for ax in axes_plots:
-        if UNRELEASED:
-            if ax.is_colorbar():
-                continue
-        image_canvas = image_canvas.update(ax.canvas, (image_canvas.shape[0], 0))
-        if UNRELEASED:
-            if ax.colorbar:
-                color_bar = ax.colorbar
-                image_canvas = image_canvas.update(color_bar.canvas, (0, image_canvas.shape[1]))
-
-    return image_canvas
-
 class FigureCanvasAscii(FigureCanvasAgg):
 
     def __init__(self, figure: Optional[Figure] = ...) -> None:
         super().__init__(figure)
-        self.fig_color_map = FigureColorMap(figure)
-
-
-    def get_all_axes_plots(self):
-        figure = self.figure
-        axes_height = AXES_HEIGHT
-        axes_width = AXES_WIDTH
-
-        axes_plots = []
-
-        for ax in figure.axes:
-            # color_map = self.fig_color_map(ax)
-            axes_plot = AxesPlot(ax, axes_height, axes_width)
-            axes_plots.append(axes_plot)
-
-        if UNRELEASED:
-            colorbars =[ax.is_colorbar() for ax in axes_plots]
-            if True in colorbars:
-                idx = colorbars.index(True)
-                ax_with_color_bar = axes_plots[idx - 1]
-                ax_with_color_bar.colorbar = axes_plots[idx]
-
-        self.axes_plots = axes_plots
-
-        return axes_plots
-
 
     def to_txt_with_color(self, sep="\n", tw=240, invert=False, threshold=200):
         self.draw()
+        axes_height = AXES_HEIGHT
+        axes_width = AXES_WIDTH
 
-        axes_plots = self.get_all_axes_plots()
-        ascii_canvases = [ax_plot.canvas for ax_plot in axes_plots]
+        all_axes_plots = []
+        for ax in self.figure.axes:
+            ax_plot = AxesPlot(ax, axes_height, axes_width)
+            all_axes_plots.append(ax_plot)
 
-        color_ascii_canvases = []
-        for canvas, ax in zip(ascii_canvases, self.figure.axes):
-            color_map = self.fig_color_map(ax)
-            arr = canvas.array
-            for color in color_map:
-                arr[arr==color_map[color]]=f"[{color}]{color_map[color]}[/{color}]"
-            canvas.array = arr
-            color_ascii_canvases.append(canvas)
+        fig_color_map = FigureColorMap(all_axes_plots)
 
-        image_canvas = draw_figure(axes_plots)
+        image_canvas = AsciiCanvas()
+        for ax_plot in all_axes_plots:
+            color_map = fig_color_map(ax_plot)
+            ax_plot.draw_canvas(color_map)
+            if ax_plot.is_colorbar():
+                image_canvas = image_canvas.update(ax_plot.color_canvas, (0, image_canvas.shape[1]))
+            else:
+                image_canvas = image_canvas.update(ax_plot.color_canvas, (image_canvas.shape[0], 0))
 
         return image_canvas
 
 
     def to_txt(self, sep="\n", tw=240, invert=False, threshold=200):
         self.draw()
+        axes_height = AXES_HEIGHT
+        axes_width = AXES_WIDTH
 
-        axes_plots = self.get_all_axes_plots()
+        all_axes_plots = []
+        for ax in self.figure.axes:
+            ax_plot = AxesPlot(ax, axes_height, axes_width)
+            all_axes_plots.append(ax_plot)
 
-        image_canvas = draw_figure(axes_plots)
+        fig_color_map = FigureColorMap(all_axes_plots)
+
+        image_canvas = AsciiCanvas()
+        for ax_plot in all_axes_plots:
+            color_map = fig_color_map(ax_plot)
+            ax_plot.draw_canvas(color_map)
+            if ax_plot.is_colorbar():
+                image_canvas = image_canvas.update(ax_plot.canvas, (0, image_canvas.shape[1]))
+            else:
+                image_canvas = image_canvas.update(ax_plot.canvas, (image_canvas.shape[0], 0))
+
         return image_canvas
-
 
     def print_txt(self, filename, **kwargs):
         if isinstance(filename, str):

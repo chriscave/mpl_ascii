@@ -10,6 +10,11 @@ from mpl_ascii.tools import linear_transform, get_xrange, get_yrange
 class ScatterPlot:
     def __init__(self, ax) -> None:
         self.ax = ax
+        self.scatter_plots = get_scatter_plots(self.ax)
+        self.values = [coll.get_array() for coll in self.scatter_plots]
+        self.colors = [coll.get_facecolor() for coll in self.scatter_plots]
+
+
     def update(self, canvas, color_to_ascii):
         return add_scatter_plots(canvas, self.ax, color_to_ascii)
 

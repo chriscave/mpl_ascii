@@ -6,7 +6,6 @@ import mpl_ascii
 from mpl_ascii.ascii_canvas import AsciiCanvas
 from mpl_ascii.bar import BarPlots, get_bars
 from mpl_ascii.color import std_color
-from mpl_ascii.color_map import ax_color_map
 from mpl_ascii.colorbar import ColorbarPlot, get_colorbar
 from mpl_ascii.format import add_ax_title, add_ticks_and_frame
 from mpl_ascii.legend import add_legend
@@ -16,46 +15,14 @@ from mpl_ascii.scatter import ScatterPlot, get_scatter_plots
 
 
 class AxesPlot:
-    def __init__(self, ax, axes_height, axes_width, colorbar=None) -> None:
+    def __init__(self, ax, axes_height, axes_width, color_map=None, colorbar=None) -> None:
         self.ax = ax
         self.plots = get_plots(ax)
         self._axes_height = axes_height
         self._axes_width = axes_width
         self._colorbar = colorbar
-
-
-    def color_to_ascii(self):
-        if not self.colorbar:
-            return ax_color_map(self.ax)
-
-        if self.colorbar:
-            colorbar = self.colorbar.ax
-            color_bar_map = ax_color_map(colorbar)
-
-            for collection in colorbar.collections:
-                if isinstance(collection, QuadMesh):
-                    cmap, norm = collection.cmap, collection.norm
-
-
-
-            tick_data = [tick.get_loc() for tick in colorbar.yaxis.get_major_ticks()]
-
-            color_to_ascii = {}
-            for collection in self.ax.collections:
-                if isinstance(collection, PathCollection):
-                    for val, color in zip(collection.get_array(), collection.get_facecolor()):
-                        min_greater = min([tick for tick in tick_data if tick >= val])
-                        color = std_color(color)
-                        char = color_bar_map[std_color(cmap(norm(min_greater)))]
-                        if color in color_to_ascii:
-                            continue
-                        color_to_ascii[color] = char
-
-        return color_to_ascii
-
-
-
-
+        self._color_map = color_map
+        self._canvas = AsciiCanvas()
 
     def is_colorbar(self):
         if len(self.plots) > 0 and type(self.plots[0]) == ColorbarPlot:
@@ -72,17 +39,31 @@ class AxesPlot:
             return 10
         return self._axes_width
 
-    @property
-    def colorbar(self):
-        return self._colorbar
+    def draw_canvas(self, color_map):
+        self._color_map = color_map
+        self._canvas = draw_ax(self.ax, self.plots, self.axes_height, self.axes_width, color_map)
+        self.create_color_canvas()
 
-    @colorbar.setter
-    def colorbar(self, colorbar):
-        self._colorbar = colorbar
+    @property
+    def color_map(self):
+        return self._color_map
 
     @property
     def canvas(self):
-        return draw_ax(self.ax, self.plots, self.axes_height, self.axes_width, self.color_to_ascii( ))
+        return self._canvas
+
+    @property
+    def color_canvas(self):
+        return self._color_canvas
+
+    def create_color_canvas(self):
+        color_canvas = AsciiCanvas(self.canvas.array.copy())
+        arr = color_canvas.array
+        for color in self.color_map:
+            arr[arr==self.color_map[color]]=f"[{color}]{self.color_map[color]}[/{color}]"
+            color_canvas.array = arr
+
+        self._color_canvas = color_canvas
 
 
 def draw_ax(ax: Axes, all_plots, axes_height, axes_width, color_to_ascii):
