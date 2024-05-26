@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add support for contour plots without colors.
 - Add support for text objects in plot.
 
+## [0.6.4] 2024-05-26
+
+### Fixed
+
+- Add fix so if there is a `None` value in only one axis then the line plot does not raise an error and instead skips over it.
+
 ## [0.6.3] 2024-05-24
 
 ### Fixed
