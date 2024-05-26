@@ -14,8 +14,6 @@ if __name__ == "__main__":
     import matplotlib.pyplot as plt
     import mpl_ascii
 
-    mpl_ascii.UNRELEASED = True
-
     # Generating some data
     np.random.seed(19680802)
 

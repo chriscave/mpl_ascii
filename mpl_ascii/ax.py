@@ -82,9 +82,8 @@ def draw_ax(ax: Axes, all_plots, axes_height, axes_width, color_to_ascii):
     return canvas
 
 def init_canvas(all_plots, axes_height, axes_width):
-    if mpl_ascii.UNRELEASED:
-        if type(all_plots[0]) == ColorbarPlot:
-            axes_width = 10
+    if type(all_plots[0]) == ColorbarPlot:
+        axes_width = 10
     canvas = AsciiCanvas(np.full((axes_height, axes_width), fill_value=" "))
     return canvas
 
@@ -92,9 +91,8 @@ def get_plots(ax):
     all_plots = []
     if has_bar_plots(ax):
         all_plots.append(BarPlots(ax))
-    if mpl_ascii.UNRELEASED:
-        if has_colorbar(ax):
-            all_plots.append(ColorbarPlot(ax))
+    if has_colorbar(ax):
+        all_plots.append(ColorbarPlot(ax))
     if has_line_plots(ax):
         all_plots.append(LinePlots(ax))
     if has_errorbars(ax):
