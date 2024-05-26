@@ -12,9 +12,10 @@ if __name__ == "__main__":
     import matplotlib.pyplot as plt
     import numpy as np
 
-    fig, ax = plt.subplots()
+    fig, axes = plt.subplots(1,2)
 
-    ax.plot([0, 0, None, 1, 1], [0, 1, None, 0, 1])
+    axes[0].plot([0, 0, None, 1, 1], [0, 1, None, 0, 1])
+    axes[1].plot([0,0,1], [None, 2,3])
 
     if out:
         fig.savefig(out)
