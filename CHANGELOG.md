@@ -12,6 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add support for contour plots without colors.
 - Add support for text objects in plot.
 
+## [0.7.1] 2024-05-28
+
+### Fixed
+
+- Fix position of yaxis labels on colorbar axis so they are on the right side instead of the left side.
+
 ## [0.7.0] 2024-05-26
 
 ### Added
