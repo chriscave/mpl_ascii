@@ -1,3 +1,4 @@
+from matplotlib.axes import Axes
 import numpy as np
 
 from mpl_ascii.ascii_canvas import AsciiCanvas
@@ -40,7 +41,7 @@ def draw_x_ticks(width, tick_data, tick_label_data, x_range):
 
     return xticks
 
-def draw_y_ticks(height, tick_data, tick_label_data, y_range):
+def draw_y_ticks(height, tick_data, tick_label_data, y_range, tick_params):
     y_min, y_max = y_range[0], y_range[1]
 
     yticks_width = max([len(label) for label in tick_label_data]) + 2
@@ -51,9 +52,14 @@ def draw_y_ticks(height, tick_data, tick_label_data, y_range):
         if y <= 0 or y > height:
             continue
         row = height - y
-        yticks[row,-2:] = "-"
-        for i, char in enumerate(list(label)):
-            yticks[row, -len(label) - 2 + i] = char
+        if tick_params.get("labelright"):
+            yticks[row,:2] = "-"
+            for i, char in enumerate(list(label)):
+                yticks[row, 2 + i] = char
+        else:
+            yticks[row,-2:] = "-"
+            for i, char in enumerate(list(label)):
+                yticks[row, -len(label) - 2 + i] = char
 
     return yticks
 
@@ -82,16 +88,21 @@ def add_xticks_and_labels(canvas, ax, axes_width):
     canvas = canvas.update(xticks_and_label, location=(canvas.shape[0]-1, 1))
     return canvas
 
-def add_yticks_and_labels(canvas, ax, axes_height):
+def add_yticks_and_labels(canvas, ax: Axes, axes_height):
     y_range = get_yrange(ax)
     tick_data = [tick.get_loc() for tick in ax.yaxis.get_major_ticks()]
     label_data = [tick.label1.get_text().replace("\n", "") for tick in ax.yaxis.get_major_ticks()]
-    yticks = AsciiCanvas(draw_y_ticks(axes_height, tick_data, label_data, y_range))
+    tick_params = ax.yaxis.get_tick_params()
+    yticks = AsciiCanvas(draw_y_ticks(axes_height, tick_data, label_data, y_range, tick_params))
 
     ylabel = AsciiCanvas(np.array([list(ax.get_ylabel())]).T)
-    yticks_and_label = yticks.update(ylabel, location=(int(yticks.shape[0] / 2), -(ylabel.shape[1] + 1)))
+    if tick_params.get("labelright"):
+        yticks_and_label = yticks.update(ylabel, location=(int(yticks.shape[0] / 2), yticks.shape[1]))
+        canvas = canvas.update(yticks_and_label, location=(1, canvas.shape[1] - 1))
 
-    canvas = canvas.update(yticks_and_label, location=(1, -yticks_and_label.shape[1]+1))
+    else:
+        yticks_and_label = yticks.update(ylabel, location=(int(yticks.shape[0] / 2), -(ylabel.shape[1] + 1)))
+        canvas = canvas.update(yticks_and_label, location=(1, -yticks_and_label.shape[1]+1))
     return canvas
 
 def add_ax_title(canvas, title):

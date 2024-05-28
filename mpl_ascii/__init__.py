@@ -53,7 +53,7 @@ class FigureCanvasAscii(FigureCanvasAgg):
             color_map = fig_color_map(ax_plot)
             ax_plot.draw_canvas(color_map)
             if ax_plot.is_colorbar():
-                image_canvas = image_canvas.update(ax_plot.color_canvas, (0, image_canvas.shape[1]))
+                image_canvas = image_canvas.update(ax_plot.color_canvas, (0, image_canvas.shape[1] + 3))
             else:
                 image_canvas = image_canvas.update(ax_plot.color_canvas, (image_canvas.shape[0], 0))
 
