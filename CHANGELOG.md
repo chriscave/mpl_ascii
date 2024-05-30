@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add support for contour plots without colors.
 - Add support for text objects in plot.
 
-## [0.7.1] 2024-05-28
+## [0.7.1] 2024-05-30
 
 ### Fixed
 
