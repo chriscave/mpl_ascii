@@ -1,9 +1,13 @@
+import matplotlib
 from matplotlib.axes import Axes
+from matplotlib.axis import Axis
 import numpy as np
 
 from mpl_ascii.ascii_canvas import AsciiCanvas
 from mpl_ascii.tools import linear_transform, get_xrange, get_yrange
 
+mpl_version = matplotlib.__version__
+mpl_version = tuple(map(int, mpl_version.split(".")))
 
 def add_ticks_and_frame(canvas, ax):
     axes_height, axes_width = canvas.shape
@@ -92,7 +96,10 @@ def add_yticks_and_labels(canvas, ax: Axes, axes_height):
     y_range = get_yrange(ax)
     tick_data = [tick.get_loc() for tick in ax.yaxis.get_major_ticks()]
     label_data = [tick.label1.get_text().replace("\n", "") for tick in ax.yaxis.get_major_ticks()]
-    tick_params = ax.yaxis.get_tick_params()
+    if mpl_version >= (3,7,0):
+        tick_params = ax.yaxis.get_tick_params()
+    else:
+        tick_params = get_tick_params(ax.yaxis)
     yticks = AsciiCanvas(draw_y_ticks(axes_height, tick_data, label_data, y_range, tick_params))
 
     ylabel = AsciiCanvas(np.array([list(ax.get_ylabel())]).T)
@@ -110,3 +117,72 @@ def add_ax_title(canvas, title):
     canvas = canvas.update(ax_title, location=(-(ax_title.shape[0] + 1), int(canvas.shape[1] / 2)))
 
     return canvas
+
+import matplotlib.artist as martist
+import matplotlib.lines as mlines
+
+_line_inspector = martist.ArtistInspector(mlines.Line2D)
+_line_param_names = _line_inspector.get_setters()
+_line_param_aliases = [list(d)[0] for d in _line_inspector.aliasd.values()]
+_gridline_param_names = ['grid_' + name
+                         for name in _line_param_names + _line_param_aliases]
+
+
+def get_tick_params(axis: Axis, which='major'):
+    from matplotlib import _api
+    _api.check_in_list(['major', 'minor'], which=which)
+    if which == 'major':
+        return _translate_tick_params(
+            axis._major_tick_kw, reverse=True
+        )
+    return _translate_tick_params(axis._minor_tick_kw, reverse=True)
+
+def _translate_tick_params(kw, reverse=False):
+    kw_ = {**kw}
+
+    # The following lists may be moved to a more accessible location.
+    allowed_keys = [
+        'size', 'width', 'color', 'tickdir', 'pad',
+        'labelsize', 'labelcolor', 'labelfontfamily', 'zorder', 'gridOn',
+        'tick1On', 'tick2On', 'label1On', 'label2On',
+        'length', 'direction', 'left', 'bottom', 'right', 'top',
+        'labelleft', 'labelbottom', 'labelright', 'labeltop',
+        'labelrotation',
+        *_gridline_param_names]
+
+    keymap = {
+        # tick_params key -> axis key
+        'length': 'size',
+        'direction': 'tickdir',
+        'rotation': 'labelrotation',
+        'left': 'tick1On',
+        'bottom': 'tick1On',
+        'right': 'tick2On',
+        'top': 'tick2On',
+        'labelleft': 'label1On',
+        'labelbottom': 'label1On',
+        'labelright': 'label2On',
+        'labeltop': 'label2On',
+    }
+    if reverse:
+        kwtrans = {
+            oldkey: kw_.pop(newkey)
+            for oldkey, newkey in keymap.items() if newkey in kw_
+        }
+    else:
+        kwtrans = {
+            newkey: kw_.pop(oldkey)
+            for oldkey, newkey in keymap.items() if oldkey in kw_
+        }
+    if 'colors' in kw_:
+        c = kw_.pop('colors')
+        kwtrans['color'] = c
+        kwtrans['labelcolor'] = c
+    # Maybe move the checking up to the caller of this method.
+    for key in kw_:
+        if key not in allowed_keys:
+            raise ValueError(
+                "keyword %s is not recognized; valid keywords are %s"
+                % (key, allowed_keys))
+    kwtrans.update(kw_)
+    return kwtrans
