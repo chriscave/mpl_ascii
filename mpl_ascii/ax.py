@@ -7,7 +7,8 @@ from mpl_ascii.ascii_canvas import AsciiCanvas
 from mpl_ascii.bar import BarPlots, get_bars
 from mpl_ascii.color import std_color
 from mpl_ascii.colorbar import ColorbarPlot, get_colorbar
-from mpl_ascii.format import add_ax_title, add_ticks_and_frame
+from mpl_ascii.contour import get_contour_plots
+from mpl_ascii.format import add_ax_title, add_text, add_ticks_and_frame
 from mpl_ascii.legend import add_legend
 from mpl_ascii.line import Errorbars, LineMarkers, LinePlots, get_errorbars, get_lines_plots, get_lines_with_markers
 from mpl_ascii.poly import ViolinPlots, get_violin_plots
@@ -73,6 +74,8 @@ def draw_ax(ax: Axes, all_plots, axes_height, axes_width, color_to_ascii):
     for plot in all_plots:
         canvas = plot.update(canvas, color_to_ascii)
 
+    canvas = add_text(canvas, ax)
+
     canvas = add_ticks_and_frame(canvas, ax)
 
     canvas = add_ax_title(canvas, ax.get_title())
@@ -103,6 +106,14 @@ def get_plots(ax):
         all_plots.append(ViolinPlots(ax))
     if has_scatter_plots(ax):
         all_plots.append(ScatterPlot(ax))
+
+    contour_plots = get_contour_plots(ax)
+    if contour_plots:
+        all_plots.append(contour_plots)
+
+    if len(all_plots) == 0:
+        raise Exception("Sorry, this type of plot is not yet a available for mpl_ascii.\n\
+Please submit feature requests to https://github.com/chriscave/mpl_ascii")
 
     return all_plots
 

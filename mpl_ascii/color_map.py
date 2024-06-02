@@ -6,6 +6,7 @@ from mpl_ascii.ax import AxesPlot, get_plots, has_colorbar
 from mpl_ascii.bar import get_bars
 from mpl_ascii.color import Char, std_color
 from mpl_ascii.colorbar import get_colorbar
+from mpl_ascii.contour import get_contour_plots
 from mpl_ascii.line import get_lines_plots
 from mpl_ascii.poly import get_violin_plots
 from mpl_ascii.scatter import ScatterPlot, get_scatter_plots
@@ -34,6 +35,10 @@ line_chars = [
     "d",
     "y",
     "~",
+    "[",
+    "]",
+    "{",
+    "}",
 ]
 
 scatter_chars = [
@@ -147,6 +152,14 @@ def ax_color_map(ax):
     for collection in ax.collections:
         for color in collection.get_facecolor():
             color = std_color(tuple(color.tolist()))
+            if color in color_to_ascii:
+                continue
+            color_to_ascii[color] = Char(next(gen), color)
+
+    gen = ascii_chars(line_chars)
+    contour_plots = get_contour_plots(ax)
+    if contour_plots:
+        for color in contour_plots.colors():
             if color in color_to_ascii:
                 continue
             color_to_ascii[color] = Char(next(gen), color)

@@ -1,6 +1,7 @@
 import matplotlib
 from matplotlib.axes import Axes
 from matplotlib.axis import Axis
+from matplotlib.text import Annotation, Text
 import numpy as np
 
 from mpl_ascii.ascii_canvas import AsciiCanvas
@@ -84,7 +85,6 @@ def add_xticks_and_labels(canvas, ax, axes_width):
     tick_data = [tick.get_position()[0] for tick in ax.xaxis.get_ticklabels()]
     label_data = [tick.get_text().replace("\n", "") for tick in ax.xaxis.get_ticklabels()]
     xticks = AsciiCanvas(draw_x_ticks(axes_width, tick_data, label_data, x_range))
-
     xlabel = AsciiCanvas(np.array([list(ax.get_xlabel())]))
 
     xticks_and_label = xticks.update(xlabel, location=(xticks.shape[0],int(xticks.shape[1] / 2)))
@@ -117,6 +117,25 @@ def add_ax_title(canvas, title):
     canvas = canvas.update(ax_title, location=(-(ax_title.shape[0] + 1), int(canvas.shape[1] / 2)))
 
     return canvas
+
+def add_text(canvas, ax: Axes):
+    texts = ax.texts
+    x_min, x_max = get_xrange(ax)
+    y_min, y_max = get_yrange(ax)
+    axes_height, axes_width = canvas.shape
+
+    for text in texts:
+        if isinstance(text, Annotation):
+            continue
+        if isinstance(text, Text):
+            text_xy = text.get_position()
+            text_canvas = AsciiCanvas(np.array([list(text.get_text())]))
+            ascii_x = round(linear_transform(text_xy[0], x_min, x_max, 0, axes_width-1))
+            ascii_y = round(linear_transform(text_xy[1], y_min, y_max, 1, axes_height))
+            canvas = canvas.update(text_canvas, (axes_height - ascii_y, ascii_x))
+
+    return canvas
+
 
 import matplotlib.artist as martist
 import matplotlib.lines as mlines

@@ -1,0 +1,46 @@
+                                                                               Simplest default with labels                                                    
+                                                                                                                                                               
+       +------------------------------------------------------------------------------------------------------------------------------------------------------+
+   2.0--                                                  +++                              ooo                              ooo                               |
+       |                                                    +++                          ooo                                  oooo                            |
+       |                                                       +++                     oo           rrrrrrrrrrrrrrrrrr           ooo                          |
+       |                                                         +++                  oo         rrr                  r            ooo                        |
+       |                                                            +++               o        rr                          −1.0      oo                       |
+   1.5--                                                              +++             o       r         [[[[[[[[[[[[                  oo                      |
+       |                                                                 +++          o      rr       [[           [[[        rr       oo                     |
+       |                                                                   +++        oo     r       [                [[       r        o                     |
+       |                                                                      +++      oo     r      [                 [[       r        o                    |
+       |                                                                        +++     oo    rr     [[                 [       r        o                    |
+   1.0--                                                                           +++    oo   rrr                     [[       r        o                    |
+       |                                                        ddddddddddddddd      +++   ooo   rr      −1.5         [[       rr        o                    |
+       |                                                     dddd                 0.5   +++  ooo   rrr         [[[[[[[        rr        o                     |
+       |                                                  dddd                        dd  ++    ooo  rrrr                    rr        oo                     |
+   0.5--                                                 dd          ~~~~~~~~~~~~~~    dddd    0.0oooo   rrrr             rrr         oo                      |
+       |                                                dd        ~~~              ~~~~   dddd    +  ooo    rrrrrrrrrrrrrr          oo                        |
+       |                                               d        ~~~                    ~~~   ddd  +++                             ooo                         |
+       |                                              dd       ~~        aaaaaaa    1.5   ~    ddd   +++    −0.5               oooo                           |
+       |                                              d        ~       aaa                   1.0  dd   +++       oooooooooooooo                               |
+   0.0--                                              d       ~~       a               aa      ~    dd    +++                                                 |
+       |                                              d       ~~       a                 a     ~~    dd     +++                                               |
+       |                                              d        ~       a                  a     ~~     dd      +++                                            |
+       |                                              dd       ~~       aa               aa      ~      d        +++                                          |
+       |                                               d        ~~       aaa           aaa       ~       d          +++                                       |
+  −0.5--                                                d        ~~~        aaaaaaaaaaaa        ~~       d            +++                                     |
+       |                                                 dd        ~~~                         ~~        d               +++                                  |
+       |                                                  ddd        ~~~~~                 ~~~~        dd                  ++++                               |
+       |                                                    ddd          ~~~~~~~~~~~~~~~~~~           dd                      +++                             |
+       |                                                      dddd                                 dddd                          +++                          |
+  −1.0--                                                         dddd                           dddd                               +++                        |
+       |                                                             ddddddd              dddddd                                      +++                     |
+       |                                                                   dddddddddddddddd                                             +++                   |
+       |                                                                                                                                   +++                |
+       |                                                                                                                                     +++              |
+  −1.5--                                                                                                                                        +++           |
+       |                                                                                                                                          +++         |
+       |                                                                                                                                             +++      |
+       |                                                                                                                                               +++    |
+       |                                                                                                                                                  +++ |
+  −2.0--                                                                                                                                                    ++|
+       +|------------------------|------------------------|------------------------|------------------------|------------------------|------------------------+
+        3                       −2                       −1                        0                        1                        2                       − 
+                                                                                                                                                               
