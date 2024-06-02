@@ -14,10 +14,13 @@ class ContourPlots:
     def colors(self):
         colors = []
         for collection in self.collections:
-            colors = [std_color(color) for color in collection.get_edgecolor()]
-            colors += colors
+            for color in collection.get_edgecolor():
+                color = std_color(color)
+                if color in colors:
+                    continue
+                colors.append(color)
 
-        return list(set(colors))
+        return colors
 
 
 
