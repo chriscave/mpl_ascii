@@ -66,7 +66,7 @@ test: $(patsubst %,test-%.success,$(ALL_PLOTS_NAMES))
 
 venv-dev:
 	eval "$$(pyenv init -)"; \
-	pyenv shell 3.10; \
+	pyenv shell 3.11; \
 	python -m venv $@; \
 	. $@/bin/activate; \
 	pip install -r requirements.txt
