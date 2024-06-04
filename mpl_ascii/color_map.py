@@ -1,6 +1,5 @@
 from typing import Any, Dict, List
-from matplotlib.collections import PathCollection, QuadMesh
-from matplotlib.figure import Figure
+from matplotlib.collections import QuadMesh
 
 from mpl_ascii.ax import AxesPlot, get_plots, has_colorbar
 from mpl_ascii.bar import get_bars
@@ -159,9 +158,8 @@ def ax_color_map(ax):
     gen = ascii_chars(line_chars)
     contour_plots = get_contour_plots(ax)
     if contour_plots:
-        for color in contour_plots.colors():
+        for color in contour_plots.colors:
             if color in color_to_ascii:
                 continue
             color_to_ascii[color] = Char(next(gen), color)
-
     return color_to_ascii
