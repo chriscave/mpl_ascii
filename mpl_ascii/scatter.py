@@ -23,7 +23,10 @@ def get_scatter_plots(ax):
     scatter_plots = []
     for collection in ax.collections:
         if isinstance(collection, PathCollection):
-            scatter_plots.append(collection)
+            paths = collection.get_paths()
+            sizes = collection.get_sizes()
+            if len(paths) > 0 and len(sizes) > 0:
+                scatter_plots.append(collection)
 
     return scatter_plots
 
