@@ -1,11 +1,8 @@
 from matplotlib.axes import Axes
-from matplotlib.collections import PathCollection, QuadMesh
 import numpy as np
 
-import mpl_ascii
 from mpl_ascii.ascii_canvas import AsciiCanvas
 from mpl_ascii.bar import BarPlots, get_bars
-from mpl_ascii.color import std_color
 from mpl_ascii.colorbar import ColorbarPlot, get_colorbar
 from mpl_ascii.contour import get_contour_plots
 from mpl_ascii.format import add_ax_title, add_text, add_ticks_and_frame
