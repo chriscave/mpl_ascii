@@ -1,0 +1,53 @@
+                                                                              Contour Plots of Two Functions                                                 
+                                                                                                                                                             
+     +------------------------------------------------------------------------------------------------------------------------------------------------------+
+     |oo  +++   +++   +++   +++    ++++  oooo+++++   ooooo          ooooooooooooooooooooooooooo         oooooo  +++++ooooo ++++    +++   +++   +++   +++  oo|
+     |++++  ++++  ++++  ++++  +++++oooooo++++oooooooo oooooooooooooooooooooooooooooooooooooooooooooooooooooo  ooooooo+++++ooooo+++++  ++++  ++++  ++++  ++++|
+     |  ++++  ++++ +++++ +++++ooooo+++ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo++ooooo+++++ +++++ +++++ ++++  |
+     |+++  +++ ++++  ++++ oooo+++ooooo oooooo  ooooooo  oooooooooooo oooooooooooooooooooooooo  oooooooooooo ooooooo  oooooo  oooo+++ooooo++++  ++++  +++ +++|
+   4-- ++++ +++  ++++ooooo++ooooo  ooooo oooooo oooooooo oooooooooooo++++++oooooooooooo++++++oooooooooooo  ooooooo ooooooooooooo ooooo+++oooo++++  +++  +++ |
+     |+  +++  ++++ooo+++oooo  ooooo ooooo oooooo  ooooooo+++ooooooooooooooo++++++++++++ooooooooooooooo+++oooooooo oooooo  oooo  oooo  oooo+++ooo++++  +++  +|
+     |+++  +++ ooo+++oooo oooo  oooo ooooo  oooooo+++ooooooo+++++++++++ ++++++++++++++++++  ++++++++++oooooooo+++oooooo ooooo ooooo oooo oooo+++ooo +++  +++|
+     |  ++++ooo++oooo ooooooooooooooo oooooo++ooooooo++++++++++++++++++++++++++++++++++++++++++++++++++ ++++++oooooo+++ooooo ooooo ooooooooo oooo++ooo++++  |
+     |+++ oo+++ooo  oo   ooo  ooo  oooo+++oooo ++++  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++ +++++oooo+++oooo  ooo  ooo   oo  ooo+++oo +++|
+     | ooo++ oo  oooo ooo oooo oooo+++oooo+++++ +++++ ++++++ +++++++++++  +++++++++++++++ +++++++++++ ++++++  ++++  ++++ooooo++oooo oooo ooo oooo  oo ++ooo |
+     |o ++ oo  ooo  oo  ooo  oo  ++ooo +++  ++++  ++++  +++++  ++++++++ooooooooooooooooooooo+++++++  ++++++ +++++ ++++  +++  oo++  oo  ooo  oo  ooo  oo ++ o|
+     |++ oo  ooo ooo  oo  ooo ++ooo++++ ++++ +++++++++++ +++++ooooooooo++++oooooooooooo+++++ooooooooo++++  +++++ ++++ ++++ ++++ooo++ ooo  oo  ooo ooo  oo ++|
+   2--  o   oo  oo  oo   oo ++ooo+++  ++  +++   +++  ++++ooooo+++oooooooooo  ooooooooo oooooooooo++++oooo++++  +++   +++  ++  +++ooo++ oo   oo  oo  oo   o  |
+     |oo  oo  oo  ooo  oo ++oo +++  ++  +++ ++++ ++++oooo+++ooooo oooooooooooooooooooooooooooooo ooooo+++oooo++++ ++++ +++  ++  +++ oo++ oo  ooo  oo  oo  oo|
+     |   oo  oo  oo  oo  ++o  +   ++  ++  +++  ++  ooo++ ooo  oooo  oooooooooooooooooooooooooo  oooo  ooo  +ooo  ++  +++  ++  ++   +  o++  oo  oo  oo  oo   |
+     |  oo  oo  oo  oo ++oo ++  +++ +++ +++  ++ ooo++ ooo oooo ooooo oooooooo oooooo  ooooooo ooooo oooo ooo ++ooo ++  +++ +++ +++  ++ oo++ oo  oo  oo  oo  |
+     |  o  oo  oo  oo ++oo ++   +  ++  ++   +  o ++ oo   o  ooo  oooo  ooooooo++++++ooooooo  oooo  ooo  o   oo ++ o  +   ++  ++  +   ++ oo++ oo  oo  oo  o  |
+     | o   o   o   o  + o  +   +  ++  ++  ++ oo++ oo   oo  oo  oo  oooo+++ooooooooooooooo++oooo  oo  oo  oo   oo ++oo ++  ++  ++  +   +  o +  o   o   o   o |
+     | o  oo  o   o  + o  +   +   +   +   +  o +  o   o   o   o   o  ++ooo++++++   +++++ oo++  o   o   o   o   o  + o  +   +   +   +   +  o +  o   o  oo  o |
+     | o  o   o   o  + o  +   +   +  ++   + oo++ oo  oo  o   o   o  + o  ++  ++++++++  ++  o +  o   o   o  oo  oo ++oo +   ++  +   +   +  o +  o   o   o  o |
+Y  0-- o  o   o   o  + o  +   +   +  ++   + oo++ oo  oo  o   o   o  + o  ++  ++++++++  ++  o +  o   o   o  oo  oo ++oo +   ++  +   +   +  o +  o   o   o  o |
+-    | o  oo  o   o  + o  +   +   +   +   +  o +  o   o   o   o   o  ++ooo++++++   +++++ oo++  o   o   o   o   o  + o  +   +   +   +   +  o +  o   o  oo  o |
+a    | o   o   o   o  + o  +   +  ++  ++  ++ oo++ oo   oo  oo  oo  oooo+++ooooooooooooooo++oooo  oo  oo  oo   oo ++oo ++  ++  ++  +   +  o +  o   o   o   o |
+x    |  o  oo  oo  oo ++oo ++   +  ++  ++   +  o ++ oo   o  ooo  oooo  ooooooo++++++ooooooo  oooo  ooo  o   oo ++ o  +   ++  ++  +   ++ oo++ oo  oo  oo  o  |
+i    |  oo  oo  oo  oo ++oo ++  +++ +++ +++  ++ ooo++ ooo oooo ooooo oooooooo oooooo  ooooooo ooooo oooo ooo ++ooo ++  +++ +++ +++  ++ oo++ oo  oo  oo  oo  |
+s    |   oo  oo  oo  oo  ++o  +   ++  ++  +++  ++  ooo++ ooo  oooo  oooooooooooooooooooooooooo  oooo  ooo  +ooo  ++  +++  ++  ++   +  o++  oo  oo  oo  oo   |
+     |oo  oo  oo  ooo  oo ++oo +++  ++  +++ ++++ ++++oooo+++ooooo oooooooooooooooooooooooooooooo ooooo+++oooo++++ ++++ +++  ++  +++ oo++ oo  ooo  oo  oo  oo|
+  −2--  o   oo  oo  oo   oo ++ooo+++  ++  +++   +++  ++++ooooo+++oooooooooo  ooooooooo oooooooooo++++oooo++++  +++   +++  ++  +++ooo++ oo   oo  oo  oo   o  |
+     |++ oo  ooo ooo  oo  ooo ++ooo++++ ++++ +++++++++++ +++++ooooooooo++++oooooooooooo+++++ooooooooo++++  +++++ ++++ ++++ ++++ooo++ ooo  oo  ooo ooo  oo ++|
+     |o ++ oo  ooo  oo  ooo  oo  ++ooo +++  ++++  ++++  +++++  ++++++++ooooooooooooooooooooo+++++++  ++++++ +++++ ++++  +++  oo++  oo  ooo  oo  ooo  oo ++ o|
+     | ooo++ oo  oooo ooo oooo oooo+++oooo+++++ +++++ ++++++ +++++++++++  +++++++++++++++ +++++++++++ ++++++  ++++  ++++ooooo++oooo oooo ooo oooo  oo ++ooo |
+     |+++ oo+++ooo  oo   ooo  ooo  oooo+++oooo ++++  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++ +++++oooo+++oooo  ooo  ooo   oo  ooo+++oo +++|
+     |  ++++ooo++oooo ooooooooooooooo oooooo++ooooooo++++++++++++++++++++++++++++++++++++++++++++++++++ ++++++oooooo+++ooooo ooooo ooooooooo oooo++ooo++++  |
+     |+++  +++ ooo+++oooo oooo  oooo ooooo  oooooo+++ooooooo+++++++++++ ++++++++++++++++++  ++++++++++oooooooo+++oooooo ooooo ooooo oooo oooo+++ooo +++  +++|
+     |+  +++  ++++ooo+++oooo  ooooo ooooo oooooo  ooooooo+++ooooooooooooooo++++++++++++ooooooooooooooo+++oooooooo oooooo  oooo  oooo  oooo+++ooo++++  +++  +|
+  −4-- ++++ +++  ++++ooooo++ooooo  ooooo oooooo oooooooo oooooooooooo++++++oooooooooooo++++++oooooooooooo  ooooooo ooooooooooooo ooooo+++oooo++++  +++  +++ |
+     |+++  +++ ++++  ++++ oooo+++ooooo oooooo  ooooooo  oooooooooooo oooooooooooooooooooooooo  oooooooooooo ooooooo  oooooo  oooo+++ooooo++++  ++++  +++ +++|
+     |  ++++  ++++ +++++ +++++ooooo+++ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo++ooooo+++++ +++++ +++++ ++++  |
+     |++++  ++++  ++++  ++++  +++++oooooo++++oooooooo oooooooooooooooooooooooooooooooooooooooooooooooooooooo  ooooooo+++++ooooo+++++  ++++  ++++  ++++  ++++|
+     |oo  +++   +++   +++   +++    ++++  oooo+++++   ooooo          ooooooooooooooooooooooooooo         oooooo  +++++ooooo ++++    +++   +++   +++   +++  oo|
+     +---------------|-----------------------------|----------------------------|-----------------------------|-----------------------------|---------------+
+                    −4                            −2                            0                             2                             4                
+                                                                                 X-axis                                                                      
+                                                                                                                                                             
+                                                                              +--------------------------+                                                   
+                                                                              | Legend                   |                                                   
+                                                                              |                          |                                                   
+                                                                              | +++ sin(sqrt(x^2 + y^2)) |                                                   
+                                                                              | ooo cos(sqrt(x^2 + y^2)) |                                                   
+                                                                              +--------------------------+                                                   
