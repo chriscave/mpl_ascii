@@ -19,18 +19,6 @@ ENABLE_COLORS = True
 
 UNRELEASED = False
 
-def show():
-    for manager in Gcf.get_all_fig_managers():
-        canvas = manager.canvas
-        canvas.draw()
-        console = Console()
-        if ENABLE_COLORS:
-            fig = canvas.to_txt_with_color()
-            console.print(fig, highlight=False)
-        else:
-            fig = canvas.to_txt()
-            print(fig)
-
 class FigureCanvasAscii(FigureCanvasAgg):
 
     def __init__(self, figure: Optional[Figure] = ...) -> None:
@@ -90,7 +78,22 @@ class FigureCanvasAscii(FigureCanvasAgg):
         else:
             filename.write(str(self.to_txt()).encode())
 
+class FigureManagerAscii(FigureManagerBase):
+    def __init__(self, canvas, num):
+        super().__init__(canvas, num)
+        self.canvas = canvas
 
+    def show(self):
+        canvas = self.canvas
+        canvas.draw()
+        console = Console()
+        if ENABLE_COLORS:
+            fig = canvas.to_txt_with_color()
+            console.print(fig, highlight=False)
+        else:
+            fig = canvas.to_txt()
+            print(fig)
 
+FigureCanvasAscii.manager_class = FigureManagerAscii
 FigureCanvas = FigureCanvasAscii
-FigureManager = FigureManagerBase
+FigureManager = FigureManagerAscii
