@@ -135,11 +135,13 @@ def get_trunc_labels(labels, trunc_size):
 
 def draw_y_ticks(height, tick_data, tick_label_data, y_range, tick_params):
     y_min, y_max = y_range[0], y_range[1]
+    labels = get_trunc_labels(tick_label_data, MAX_TRUNC_LEN)
 
-    yticks_width = max([len(label) for label in tick_label_data]) + 2
+    yticks_width = max([len(label) for label in labels]) + 2
     yticks = np.full((height, yticks_width), " ")
 
-    for y, label in zip(tick_data, tick_label_data):
+
+    for y, label in zip(tick_data, labels):
         y = round(linear_transform(y, y_min, y_max, 1, height))
         if y <= 0 or y > height:
             continue

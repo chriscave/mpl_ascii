@@ -36,6 +36,16 @@ if __name__ == "__main__":
     ]
 
 
+    y_tick_labels = [
+    'Another very long tick label 1',
+    'Another very long tick label 2',
+    'Another very long tick label 3',
+    'Another very long tick label 4',
+    'Another very long tick label 5',
+    ]
+
+# Create the plot
+
     # Create the plot
     fig, ax = plt.subplots()
     ax.plot(x, y, marker='o')
@@ -44,9 +54,12 @@ if __name__ == "__main__":
     ax.set_xticks(x)
     ax.set_xticklabels(x_tick_labels, rotation=45, ha='right')
 
+    ax.set_yticks([0,20,40,60,80])
+    ax.set_yticklabels(y_tick_labels)
+
     # Set labels and title
     ax.set_xlabel('X Axis with Long Labels')
-
+    ax.set_ylabel('Y Axis with Long Labels')
     ax.set_title('Plot with Long Tick Labels')
 
     fig.tight_layout()
