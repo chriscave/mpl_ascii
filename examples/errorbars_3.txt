@@ -45,11 +45,11 @@
              0                             2                             4                             6                             8                       
                                                                                                                                                              
                                                                                                                                                              
-                                                                              +----------------------------------+                                           
-                                                                              | Legend                           |                                           
-                                                                              |                                  |                                           
-                                                                              |     both limits (default)        |                                           
-                                                                              |     uplims=True                  |                                           
-                                                                              |     uplims=True, lolims=True     |                                           
-                                                                              |     subsets of uplims and lolims |                                           
-                                                                              +----------------------------------+                                           
+                                                            +----------------------------------+                                                             
+                                                            | Legend                           |                                                             
+                                                            |                                  |                                                             
+                                                            |     both limits (default)        |                                                             
+                                                            |     uplims=True                  |                                                             
+                                                            |     uplims=True, lolims=True     |                                                             
+                                                            |     subsets of uplims and lolims |                                                             
+                                                            +----------------------------------+                                                             

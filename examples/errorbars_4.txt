@@ -45,10 +45,10 @@
              0.0                             0.5                             1.0                              1.5                             2.0              
                                                                                                                                                                
                                                                                                                                                                
-                                                                                +------------------------------------+                                         
-                                                                                | Legend                             |                                         
-                                                                                |                                    |                                         
-                                                                                |     xlolims=True                   |                                         
-                                                                                |     subsets of xuplims and xlolims |                                         
-                                                                                |     xuplims=True                   |                                         
-                                                                                +------------------------------------+                                         
+                                                            +------------------------------------+                                                             
+                                                            | Legend                             |                                                             
+                                                            |                                    |                                                             
+                                                            |     xlolims=True                   |                                                             
+                                                            |     subsets of xuplims and xlolims |                                                             
+                                                            |     xuplims=True                   |                                                             
+                                                            +------------------------------------+                                                             

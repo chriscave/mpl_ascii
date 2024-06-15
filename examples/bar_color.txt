@@ -45,11 +45,11 @@
                 apple               blueberry                 cherry                  orange               
                                                                                                            
                                                                                                            
-                                                      +-------------+                                      
-                                                      | Fruit color |                                      
-                                                      |             |                                      
-                                                      | ### red     |                                      
-                                                      | %%% blue    |                                      
-                                                      | ### red     |                                      
-                                                      | &&& orange  |                                      
-                                                      +-------------+                                      
+                                              +-------------+                                              
+                                              | Fruit color |                                              
+                                              |             |                                              
+                                              | ### red     |                                              
+                                              | %%% blue    |                                              
+                                              | ### red     |                                              
+                                              | &&& orange  |                                              
+                                              +-------------+                                              

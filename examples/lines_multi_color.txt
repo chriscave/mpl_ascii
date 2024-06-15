@@ -1,4 +1,4 @@
-                                                                                Plot of Continuous Functions                                                    
+                                                                  Plot of Continuous Functions                                                                  
                                                                                                                                                                 
         +------------------------------------------------------------------------------------------------------------------------------------------------------+
    10.0--                                                                                                                           r                          |
@@ -19,12 +19,12 @@
     2.5--                   oo  o                   ++++      o   o  ++aa              r       aa   o  rrr                  r     o   o                        |
         |                  oo   o                +++         oo   o   aa++++          r        oaa  o    rr                rr   oo    o                        |
         |                oo     o              +++         oo     o aa     +++       r      ooo   aao      rr             rr  ooo     o                        |
-        |            oooo       o            +++       oooo       aaa        +++    rr   oooo      aaa       rrr        rr oooo       o                        |
-        |       ooaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaao            ++   roooo            oaaaaaaaaarrrrrrrrrraaaaaaaaaaaaaaaaaaaaaaaaaaaaa         |
-f   0.0--       aaa              o        ++ ooooo                 o           oooor                 o           ooooo                 o          oooaaa       |
-(       |                        o       oooo                      o       oooo   +r                 o       oooo                      o       oooo            |
-x       |                        o     ooo                         o     ooo      r ++               o     oo                          o     oo                |
-)       |                        o    oo                           o    o         r  ++              o   oo                            o   oo                  |
+f       |            oooo       o            +++       oooo       aaa        +++    rr   oooo      aaa       rrr        rr oooo       o                        |
+(       |       ooaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaao            ++   roooo            oaaaaaaaaarrrrrrrrrraaaaaaaaaaaaaaaaaaaaaaaaaaaaa         |
+x   0.0--       aaa              o        ++ ooooo                 o           oooor                 o           ooooo                 o          oooaaa       |
+)       |                        o       oooo                      o       oooo   +r                 o       oooo                      o       oooo            |
+        |                        o     ooo                         o     ooo      r ++               o     oo                          o     oo                |
+        |                        o    oo                           o    o         r  ++              o   oo                            o   oo                  |
    −2.5--                        o   o                             o   o         r    ++             o   o                             o  oo                   |
         |                        o +o                              o  o          r     ++            o  o                              o  o                    |
         |                        o++o                              o  o         r        +           o  o                              o oo                    |
@@ -43,13 +43,13 @@ x       |                        o     ooo                         o     ooo    
   −10.0--              +                                                    r                        +                                                         |
         +----------|--------------------|---------------------|--------------------|---------------------|---------------------|--------------------|----------+
                   −6                   −4                    −2                    0                     2                     4                    6           
-                                                                                    x                                                                           
+                                                                                   x                                                                            
                                                                                                                                                                 
-                                                                                +---------------------+                                                         
-                                                                                | Legend              |                                                         
-                                                                                |                     |                                                         
-                                                                                | +++ -x**2 - 4x - 1  |                                                         
-                                                                                | ooo tan(x)          |                                                         
-                                                                                | aaa 8exp(-x^2)      |                                                         
-                                                                                | rrr x^3 - 6x^2 + 9x |                                                         
-                                                                                +---------------------+                                                         
+                                                                    +---------------------+                                                                     
+                                                                    | Legend              |                                                                     
+                                                                    |                     |                                                                     
+                                                                    | +++ -x**2 - 4x - 1  |                                                                     
+                                                                    | ooo tan(x)          |                                                                     
+                                                                    | aaa 8exp(-x^2)      |                                                                     
+                                                                    | rrr x^3 - 6x^2 + 9x |                                                                     
+                                                                    +---------------------+                                                                     
