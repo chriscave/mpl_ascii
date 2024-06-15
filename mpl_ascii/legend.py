@@ -42,6 +42,8 @@ def add_legend(canvas, legend, color_to_ascii):
         legend_frame = AsciiCanvas(draw_frame(canvas_legend.shape[0]+2, canvas_legend.shape[1]+4))
         canvas_legend = legend_frame.update(canvas_legend, (1,2))
 
-        canvas = canvas.update(canvas_legend, (canvas.shape[0] + 1, round(canvas.shape[1] / 2) ))
+        start_idx = int((canvas.shape[1] / 2) - (canvas_legend.shape[1] / 2))
+
+        canvas = canvas.update(canvas_legend, (canvas.shape[0] + 1, start_idx ))
 
     return canvas
