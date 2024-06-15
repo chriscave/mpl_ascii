@@ -7,6 +7,9 @@ import numpy as np
 from mpl_ascii.ascii_canvas import AsciiCanvas
 from mpl_ascii.tools import linear_transform, get_xrange, get_yrange
 
+
+MAX_TRUNC_LEN = 10
+
 mpl_version = matplotlib.__version__
 mpl_version = tuple(map(int, mpl_version.split(".")))
 
@@ -35,16 +38,100 @@ def draw_frame(height, width):
 def draw_x_ticks(width, tick_data, tick_label_data, x_range):
     x_min, x_max = x_range[0], x_range[1]
 
-    xticks = np.full((2, width), " ")
+    tick_locations=[]
+    visible_labels = []
     for x, label in zip(tick_data, tick_label_data):
         x = round(linear_transform(x, x_min, x_max, 0, width-1))
         if x < 0 or x >= width:
             continue
-        xticks[0:1,x] = "|"
-        for i, char in enumerate(list(label)):
-            xticks[-1, x - len(label) + i+1] = char
+        tick_locations.append(x)
+        visible_labels.append(label)
+
+
+    tick_locs_and_frame = tick_locations.copy()
+    tick_locs_and_frame.insert(0, -1) # include the frame, 0 index is not occupied
+
+    label_idxs = get_xticklabel_loc_idxs(tick_locations, visible_labels, width)
+    transpose_labels = False
+    for label in label_idxs:
+        start, end = label_idxs[label]
+        if (end - start) < len(label):
+            transpose_labels = True
+            break
+
+    if transpose_labels:
+        max_label_len = max([len(l) for l in label_idxs])
+        xticks = np.full((max_label_len + 1, width), " ")
+        for loc, label in zip(tick_locations, label_idxs):
+            xticks[0:1,loc] = "|"
+            for i, char in enumerate(list(label)):
+                xticks[1+i, loc] = char
+
+    else:
+        xticks = np.full((2, width), " ")
+        for tick_loc, label in zip(tick_locations, label_idxs):
+            xticks[0:1,tick_loc] = "|"
+            start_idx, _ = label_idxs[label]
+            for i, char in enumerate(list(label)):
+                xticks[-1, start_idx + i] = char
 
     return xticks
+
+def get_xticklabel_loc_idxs(tick_loc, labels, xaxis_width):
+    trunc_labels = get_trunc_labels(labels, MAX_TRUNC_LEN)
+    label_loc = dict()
+    prev_end_idx = -1
+    for i, (tl, lab, trlab) in enumerate(zip(tick_loc, labels, trunc_labels)):
+        label = lab
+        next_tick_loc = xaxis_width
+        if i < len(tick_loc) - 1:
+            next_tick_loc = tick_loc[i+1]
+
+        ll = len(label)
+        start_idx = tl - ll + 1
+        if start_idx <= prev_end_idx:
+            start_idx = tl
+
+        end_idx = start_idx + ll
+        if end_idx > next_tick_loc:
+            label = trlab
+            ll = len(label)
+            start_idx = tl - ll + 1
+            if start_idx <= prev_end_idx:
+                start_idx = tl
+
+            end_idx = start_idx + ll
+            if end_idx > next_tick_loc:
+                end_idx = start_idx
+
+        prev_end_idx = end_idx
+        label_loc[label] = (start_idx, end_idx)
+
+    return label_loc
+
+def get_trunc_labels(labels, trunc_size):
+    ellipse = '\u2026'
+    lb = 6
+    regions = isolate_interesting_regions(labels, trunc_size, lb)
+    trunc_labels = []
+    for idx, label in enumerate(labels):
+        start = regions[idx]
+        end = start+trunc_size
+        trunc_label = label[start:end]
+        if start > 0:
+            trunc_label = list(trunc_label)
+            trunc_label[0] = ellipse
+            trunc_label = "".join(trunc_label)
+        if end < len(label):
+            trunc_label = list(trunc_label)
+            trunc_label[-1] = ellipse
+            trunc_label = "".join(trunc_label)
+
+        trunc_labels.append(trunc_label)
+
+    return trunc_labels
+
+
 
 def draw_y_ticks(height, tick_data, tick_label_data, y_range, tick_params):
     y_min, y_max = y_range[0], y_range[1]
@@ -205,3 +292,52 @@ def _translate_tick_params(kw, reverse=False):
                 % (key, allowed_keys))
     kwtrans.update(kw_)
     return kwtrans
+
+def isolate_interesting_regions(strs, trunc_size=10, lb=3):
+    regions = []
+    for i, me in enumerate(strs):
+        i_regions = []
+        others = strs[:i] + strs[i + 1 :]
+        if i < len(strs):
+            for other in others:
+                if _compare(me, other, trunc_size) > 0:
+                    reg_start = _spool(me, other, lb=lb)
+                    i_regions.append(reg_start)
+
+        any_safe = False
+        for reg in i_regions:
+            if _is_region_cross_safe(me, others, reg, trunc_size):
+                regions.append(reg)
+                any_safe |= True
+                break
+        if not any_safe:
+            regions.append(0)
+
+    return regions
+
+
+def _compare(me, other, trunc_size):
+    if me == other:
+        return -1
+    if me[:trunc_size] == other[:trunc_size]:
+        return 1
+    else:
+        return 0
+
+
+def _spool(me, other, lb):
+    start = 0
+    for i, (c1, c2) in enumerate(zip(me, other)):
+        if c1 == c2:
+            continue
+        start = i - lb
+        break
+    return max(start, 0)
+
+
+def _is_region_cross_safe(me, others, region, trunc_size):
+    safe = True
+    for other in others:
+        safe &= me[region : region + trunc_size] != other[region : region + trunc_size]
+
+    return safe
