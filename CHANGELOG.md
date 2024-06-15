@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Updated tick rendering logic to prevent long ticks from overlapping. Now, long ticks will either render in alternate directions or extend downwards.
+- Updated tick rendering logic to prevent overlap. Xticks now alternate direction or extend downwards, with possible truncation for both xticks and yticks.
 - Changed axes labels, title and legend so they are now centered.
 
 ## [0.9.0] 2024-06-11
