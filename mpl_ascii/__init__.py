@@ -1,5 +1,5 @@
+import os
 from typing import Optional
-from matplotlib._pylab_helpers import Gcf
 
 from matplotlib.backends.backend_agg import (
     FigureManagerBase,
@@ -8,13 +8,14 @@ from matplotlib.backends.backend_agg import (
 from matplotlib.figure import Figure
 
 from mpl_ascii.ascii_canvas import AsciiCanvas
-from mpl_ascii.ax import AxesPlot, draw_ax, get_plots
+from mpl_ascii.ax import AxesPlot
 from mpl_ascii.color_map import FigureColorMap
 
 from rich.console import Console
 
-AXES_WIDTH = 150
-AXES_HEIGHT = 40
+AXES_HEIGHT = int(os.getenv("AXES_HEIGHT", 40))
+AXES_WIDTH = int(os.getenv("AXES_WIDTH", 150))
+
 ENABLE_COLORS = True
 
 UNRELEASED = False

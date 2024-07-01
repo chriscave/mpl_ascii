@@ -142,11 +142,11 @@ You can find more examples and their outputs in the `examples` folder.
 
 ### mpl_ascii.AXES_WIDTH
 
-Adjust the width of each axis according to the number of characters. The final width of the image might extend a few characters beyond this, depending on the size of the ticks and axis labels. Default is `150`.
+Adjust the width of each axis according to the number of characters. The library first looks for the `AXES_WIDTH` as an environment variable. This can then be overwritten in the Python program by setting `mpl_ascii.AXES_WIDTH`. The final width of the image might extend a few characters beyond this, depending on the size of the ticks and axis labels. Default is `150`.
 
 ### mpl_ascii.AXES_HEIGHT
 
-Adjust the height of each axis according to the number of characters. The final height of the image might extend a few characters beyond this, depending on the size of the ticks and axis labels. Default is `40`
+Adjust the height of each axis according to the number of characters. The library first looks for the `AXES_HEIGHT` as an environment variable. This can then be overwritten in the Python program by setting `mpl_ascii.AXES_HEIGHT`. The final height of the image might extend a few characters beyond this, depending on the size of the ticks and axis labels. Default is `40`.
 
 ### mpl_ascii.ENABLE_COLORS
 
