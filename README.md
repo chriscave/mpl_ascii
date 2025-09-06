@@ -1,6 +1,6 @@
 # mpl_ascii
 
-A matplotlib backend that produces plots using only ASCII characters. It is available for python 3.7+.
+A matplotlib backend that produces plots using only ASCII characters. It is available for python 3.9+.
 
 ## Quick start
 
@@ -28,15 +28,10 @@ See more information about using backends here: https://matplotlib.org/stable/us
 
 ### Bar chart
 
-The following is taken from the example in `examples/bar_color.py`
 
 ```python
 import matplotlib.pyplot as plt
 import matplotlib as mpl
-import mpl_ascii
-
-mpl_ascii.AXES_WIDTH=100
-mpl_ascii.AXES_HEIGHT=40
 
 mpl.use("module://mpl_ascii")
 
@@ -59,7 +54,7 @@ ax.legend(title='Fruit color')
 plt.show()
 ```
 
-![bar chart with color](https://imgur.com/u4pRU3E.png)
+![bar chart with color](assets/bar_chart.png)
 
 ### Scatter plot
 
@@ -104,17 +99,11 @@ plt.show()
 
 ### Line plot
 
-The following is taken from the example in `examples/double_plot.py`
-
-
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib as mpl
 import mpl_ascii
-
-mpl_ascii.AXES_WIDTH=100
-mpl_ascii.AXES_HEIGHT=40
 
 
 mpl.use("module://mpl_ascii")
@@ -134,24 +123,9 @@ ax.set(xlabel='time (s)', ylabel='voltage (mV)',
 
 plt.show()
 ```
-![Double plot with colors](https://imgur.com/PyTPR4C.png)
+![Double plot with colors](assets/scatter.png)
 
-You can find more examples and their outputs in the `examples` folder.
-
-## Global Variables
-
-### mpl_ascii.AXES_WIDTH
-
-Adjust the width of each axis according to the number of characters. The library first looks for the `AXES_WIDTH` as an environment variable. This can then be overwritten in the Python program by setting `mpl_ascii.AXES_WIDTH`. The final width of the image might extend a few characters beyond this, depending on the size of the ticks and axis labels. Default is `150`.
-
-### mpl_ascii.AXES_HEIGHT
-
-Adjust the height of each axis according to the number of characters. The library first looks for the `AXES_HEIGHT` as an environment variable. This can then be overwritten in the Python program by setting `mpl_ascii.AXES_HEIGHT`. The final height of the image might extend a few characters beyond this, depending on the size of the ticks and axis labels. Default is `40`.
-
-### mpl_ascii.ENABLE_COLORS
-
-Executing `plt.show()` will render the image in colored text. Default is `True`
-
+You can find more examples in the `tests/accepted` folder.
 
 ## Use cases
 
