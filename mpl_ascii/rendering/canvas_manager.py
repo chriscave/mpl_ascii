@@ -12,7 +12,7 @@ from mpl_ascii.scene.store import Store
 
 from matplotlib.backends.backend_agg import FigureCanvasAgg
 
-
+ENABLE_COLORS: bool = True
 
 class FigureCanvasAscii(FigureCanvasBase):
     def __init__(self, figure: Figure) -> None:
@@ -85,7 +85,6 @@ class FigureManagerAscii(FigureManagerBase):
 
         canvas = self.ascii_canvas.draw_canvas()
 
-        ENABLE_COLORS = True
         if ENABLE_COLORS == True:
             from rich.console import Console
             console = Console()

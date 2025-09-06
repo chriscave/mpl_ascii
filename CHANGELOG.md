@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0] 2025-09-06
+
+### Added
+- Support for subplots.
+- Size of plots are automatically scaled to size specified in mpl frontend.
+- Support for spines.
+- Support for polygons.
+- Support for annotations.
+
+### Changed
+- Improved styling for axis frames.
+- Legend is plotted similiarly using best location.
+
+### Removed
+- Removed support for python versions 3.7, 3.8.
+- Removed support for violin plots and box plots.
+- Removed support for QuadMesh (such as colorbars).
+- Removed support for setting height and width of ascii plot with `AXES_WIDTH` and `AXES_HEIGHT`
+
 ## [0.10.0] 2024-07-01
 
 ### Added
