@@ -58,16 +58,11 @@ plt.show()
 
 ### Scatter plot
 
-The following is taken from the example in `examples/scatter_multi_color.py`
 
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib as mpl
-import mpl_ascii
-
-mpl_ascii.AXES_WIDTH=100
-mpl_ascii.AXES_HEIGHT=40
 
 
 mpl.use("module://mpl_ascii")
@@ -95,7 +90,7 @@ ax.legend(title='Point Colors')
 plt.show()
 ```
 
-![Scatter plot with color](https://imgur.com/6LOv6L3.png)
+![Scatter plot with color](assets/scatter.png)
 
 ### Line plot
 
@@ -123,7 +118,7 @@ ax.set(xlabel='time (s)', ylabel='voltage (mV)',
 
 plt.show()
 ```
-![Double plot with colors](assets/scatter.png)
+![Double plot with colors](assets/double_plot.png)
 
 You can find more examples in the `tests/accepted` folder.
 
