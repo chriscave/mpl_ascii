@@ -78,12 +78,13 @@ def parse_artist(artist: Artist, insert_order: float) -> tuple[list[ParsedShape]
 
 
     cls_name = type(artist).__name__
-    path = f"mpl_ascii/artists/{cls_name}.py"
+    mpl_ascii_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    artists_dir = os.path.join(mpl_ascii_dir, "artists")
+    path = os.path.join(artists_dir, f"{cls_name}.py")
     if not os.path.exists(path):
         return ([],[])
 
-
-    module_name = path.replace('/', '.')
+    module_name = f"mpl_ascii.artists.{cls_name}"
     spec = importlib.util.spec_from_file_location(module_name, path)
     if spec is None or spec.loader is None:
         return ([],[])
